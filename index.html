@@ -689,7 +689,7 @@
               Berdasarkan laporan riset <strong>DARPA Instant Fire Suppression</strong>, osilasi kecepatan udara di sekitar nyala api menipiskan <em>thermal boundary layer</em> di atas permukaan bahan bakar.
             </p>
             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-orange-300">
-              δ_T ≈ L / √Re  &nbsp;→&nbsp; Kecepatan akustik naik ⇒ δ_T menipis ⇒ Pendinginan cepat
+              δ_T ≈ (L / √Re) · Pr⁻¹/³  &nbsp;→&nbsp; Kecepatan akustik naik ⇒ Re naik ⇒ δ_T menipis ⇒ Pendinginan cepat
             </div>
             <p class="text-xs text-slate-400 leading-relaxed">
               Selain itu, getaran akustik menyebarkan nyala api ke area yang lebih luas, menurunkan kerapatan panas lokal di bawah <strong>suhu nyala minimum (ignition temperature)</strong>.
@@ -704,10 +704,10 @@
             </div>
             <h3 class="text-lg font-bold text-white">Regangan Nyala Kritis (Strain-Rate Extinction)</h3>
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Api membutuhkan waktu tertentu ($\tau_{\text{chem}}$) agar molekul uap bahan bakar dan oksigen ($O_2$) bereaksi sempurna. Tembakan 30 pulsa vortex per detik menciptakan laju regangan aliran ($\tau_{\text{flow}}$) yang sangat singkat.
+              Api membutuhkan waktu tertentu ($\tau_{\text{chem}}$) agar molekul uap bahan bakar dan oksigen ($O_2$) bereaksi sempurna. Tembakan pulsa vortex menghasilkan laju regangan aliran ($\kappa$) yang sangat tinggi, sehingga memangkas waktu tinggal fluida ($\tau_{\text{flow}} \sim 1/\kappa$) menjadi jauh lebih singkat daripada waktu reaksi kimia ($\tau_{\text{chem}}$).
             </p>
             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-emerald-300">
-              Jika τ_flow &lt; τ_chem (Da &lt; Da_kritis) ⇒ Reaksi Rantai Pembakaran Putus!
+              Da = τ_flow / τ_chem ≈ 1 / (κ · τ_chem) &lt; Da_kritis ⇒ Reaksi Rantai Pembakaran Putus!
             </div>
             <p class="text-xs text-slate-400 leading-relaxed">
               Oksigen dan uap bahan bakar dipisahkan lebih cepat daripada kecepatan reaksi kimia pembakaran itu sendiri, sehingga api langsung padam seketika (<em>blow-off / suffocation</em>).
