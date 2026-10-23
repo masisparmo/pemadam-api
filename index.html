@@ -3,16 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vortex Tech — Simulator Interaktif, Fisika & Panduan Perakitan Pemadam Api Gelombang Suara</title>
+  <title>Simulasi Pemadam Api Akustik — Simulasi Alat Pemadam Api Menggunakan Gelombang Suara</title>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('vortex_theme');
+      if (savedTheme === 'light' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      }
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      color-scheme: dark;
+    }
+    html.light {
+      color-scheme: light;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0b0f19;
       color: #f1f5f9;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
     .mono {
       font-family: 'JetBrains Mono', monospace;
@@ -21,14 +41,218 @@
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(51, 65, 85, 0.6);
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .tab-active {
-      background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
-      color: #ffffff;
+      background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%) !important;
+      color: #ffffff !important;
       box-shadow: 0 4px 15px rgba(234, 88, 12, 0.35);
     }
     input[type="range"] {
       accent-color: #f97316;
+    }
+
+    /* Light Theme System */
+    html.light body {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    html.light header {
+      background-color: rgba(255, 255, 255, 0.94) !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    html.light .header-title {
+      color: #0f172a !important;
+    }
+
+    html.light .header-subtitle {
+      color: #475569 !important;
+    }
+
+    html.light nav,
+    html.light .header-nav {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    html.light .tab-btn:not(.tab-active) {
+      color: #475569 !important;
+    }
+
+    html.light .tab-btn:not(.tab-active):hover {
+      color: #0f172a !important;
+      background-color: #e2e8f0 !important;
+    }
+
+    html.light .glass-card {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    }
+
+    html.light .bg-slate-900,
+    html.light .bg-slate-900\/90,
+    html.light .bg-slate-900\/95 {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    }
+
+    html.light .bg-slate-950,
+    html.light .bg-slate-950\/90 {
+      background-color: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    html.light .bg-slate-800 {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    html.light .bg-slate-800\/80 {
+      background-color: #e2e8f0 !important;
+    }
+
+    html.light .border-slate-800,
+    html.light .border-slate-700 {
+      border-color: #e2e8f0 !important;
+    }
+
+    /* Headings & Text in Light Mode */
+    html.light h1:not(.keep-text),
+    html.light h2:not(.keep-text),
+    html.light h3:not(.keep-text),
+    html.light h4:not(.keep-text),
+    html.light strong:not(.keep-text),
+    html.light .text-white:not(.keep-white) {
+      color: #0f172a !important;
+    }
+
+    html.light .text-slate-100 {
+      color: #0f172a !important;
+    }
+
+    html.light .text-slate-200 {
+      color: #1e293b !important;
+    }
+
+    html.light .text-slate-300 {
+      color: #334155 !important;
+    }
+
+    html.light .text-slate-400 {
+      color: #64748b !important;
+    }
+
+    /* High contrast metrics & colored labels in Light Mode */
+    html.light .text-orange-400 {
+      color: #c2410c !important;
+    }
+    html.light .text-cyan-400,
+    html.light .text-cyan-300 {
+      color: #0284c7 !important;
+    }
+    html.light .text-sky-400,
+    html.light .text-sky-300 {
+      color: #0369a1 !important;
+    }
+    html.light .text-amber-400,
+    html.light .text-amber-300 {
+      color: #b45309 !important;
+    }
+    html.light .text-emerald-400,
+    html.light .text-emerald-300 {
+      color: #047857 !important;
+    }
+    html.light .text-red-400,
+    html.light .text-red-300 {
+      color: #b91c1c !important;
+    }
+    html.light .text-purple-300 {
+      color: #7e22ce !important;
+    }
+    html.light .text-blue-400 {
+      color: #1d4ed8 !important;
+    }
+
+    /* Retain white text on solid buttons & badges */
+    html.light .tab-active,
+    html.light .tab-active *,
+    html.light .bg-gradient-to-r,
+    html.light .bg-gradient-to-r *,
+    html.light .bg-gradient-to-br,
+    html.light .bg-gradient-to-br *,
+    html.light .bg-red-600,
+    html.light .bg-red-600 *,
+    html.light .bg-orange-600,
+    html.light .bg-orange-600 *,
+    html.light .keep-white,
+    html.light .keep-white * {
+      color: #ffffff !important;
+    }
+
+    /* Amber button keeps dark text for high contrast */
+    html.light .bg-amber-500,
+    html.light .bg-amber-500 * {
+      color: #0f172a !important;
+    }
+
+    /* Inputs, Selects, and Canvases */
+    html.light select,
+    html.light input[type="text"],
+    html.light input[type="number"] {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light option {
+      background-color: #ffffff;
+      color: #0f172a;
+    }
+
+    html.light #sim-canvas-container,
+    html.light #scale-canvas-container {
+      background-color: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    html.light footer {
+      background-color: #f1f5f9 !important;
+      border-top-color: #e2e8f0 !important;
+    }
+    html.light footer * {
+      color: #475569 !important;
+    }
+
+    /* Theme Toggle Button Styling */
+    .theme-toggle-btn {
+      transition: all 0.2s ease;
+    }
+    html:not(.light) .theme-toggle-btn {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+    html:not(.light) .theme-toggle-btn:hover {
+      background-color: #1e293b;
+      color: #ffffff;
+      border-color: #475569;
+    }
+    html.light .theme-toggle-btn {
+      background-color: #ffffff;
+      border-color: #cbd5e1;
+      color: #334155;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    html.light .theme-toggle-btn:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
     }
   </style>
 </head>
@@ -44,32 +268,38 @@
           </svg>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">VORTEX TECH LAB</h1>
-            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">ISIF 2026 Gold Medal</span>
-          </div>
-          <p class="text-xs text-slate-400">Simulator Fisika Pemadam Api Akustik (~30 Hz) & Panduan Rekayasa Prototipe</p>
+          <h1 class="header-title text-lg sm:text-xl font-extrabold tracking-tight text-white">Simulasi Pemadam Api Akustik</h1>
+          <p class="header-subtitle text-xs text-slate-400">Simulasi Alat Pemadam Api Menggunakan Gelombang Suara</p>
         </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800" aria-label="Menu Utama">
-        <button id="nav-sim" type="button" class="tab-btn tab-active px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all" data-tab="sim">
-          🔥 Lab Simulasi
+      <!-- Navigation & Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-wrap items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 header-nav" aria-label="Menu Utama">
+          <button id="nav-sim" type="button" class="tab-btn tab-active px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all" data-tab="sim">
+            🔥 Lab Simulasi
+          </button>
+          <button id="nav-cara" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="cara">
+            💡 Konsep Dasar
+          </button>
+          <button id="nav-fisika" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="fisika">
+            ⚛️ Teori Fisika
+          </button>
+          <button id="nav-diy" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="diy">
+            🛠️ Cara Membuat Alat
+          </button>
+          <button id="nav-skala" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="skala">
+            🏢 Skala Rumah &amp; Gedung
+          </button>
+        </nav>
+
+        <!-- Mode Gelap/Terang Toggle Button -->
+        <button id="theme-toggle" type="button" aria-label="Ganti mode gelap atau terang" title="Ganti Mode Gelap / Terang" class="theme-toggle-btn px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs sm:text-sm font-semibold shadow-sm cursor-pointer transition-all">
+          <span id="theme-icon" class="text-base">🌙</span>
+          <span id="theme-text" class="hidden sm:inline">Gelap</span>
         </button>
-        <button id="nav-cara" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="cara">
-          💡 Cara Kerja Awam
-        </button>
-        <button id="nav-fisika" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="fisika">
-          ⚛️ Teori Fisika
-        </button>
-        <button id="nav-diy" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="diy">
-          🛠️ Cara Membuat Alat
-        </button>
-        <button id="nav-skala" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="skala">
-          🏢 Skala Rumah &amp; Gedung
-        </button>
-      </nav>
+      </div>
     </div>
   </header>
 
@@ -284,11 +514,11 @@
       </div>
     </section>
 
-    <!-- ==================== TAB 2: CARA KERJA AWAM ==================== -->
+    <!-- ==================== TAB 2: KONSEP DASAR ==================== -->
     <section id="tab-cara" class="tab-panel hidden space-y-6">
       <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
         <div class="max-w-3xl space-y-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-orange-400">Penjelasan Bahasa Awam</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-orange-400">Konsep Dasar Pemadaman Api Akustik</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Bagaimana Suara Bisa Memadamkan Api Tanpa Air?</h2>
           <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
             Bayangkan saat Anda meniup lilin ulang tahun. Lilin padam bukan karena ludah atau air, melainkan karena <strong>embusan udara</strong> Anda memisahkan uap panas lilin dari oksigen di sekitarnya. <strong>Vortex Tech</strong> karya Ángela Karime Venegas Hernández melakukan hal yang sama, tetapi menggunakan <strong>"peluru cincin udara tak kasatmata"</strong> yang ditembakkan oleh suara bass berfrekuensi sangat rendah (30 Hz) sebanyak <strong>30 kali setiap detik</strong>!
@@ -886,6 +1116,42 @@
   <!-- Application Script -->
   <script>
     (function() {
+      // --- 0. Theme Mode Controller (Gelap / Terang) ---
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const themeText = document.getElementById('theme-text');
+
+      function applyTheme(isLight) {
+        if (isLight) {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+          if (themeIcon) themeIcon.textContent = '☀️';
+          if (themeText) themeText.textContent = 'Terang';
+          if (themeToggleBtn) {
+            themeToggleBtn.setAttribute('title', 'Beralih ke Mode Gelap');
+          }
+        } else {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+          if (themeIcon) themeIcon.textContent = '🌙';
+          if (themeText) themeText.textContent = 'Gelap';
+          if (themeToggleBtn) {
+            themeToggleBtn.setAttribute('title', 'Beralih ke Mode Terang');
+          }
+        }
+      }
+
+      applyTheme(document.documentElement.classList.contains('light'));
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function() {
+          const currentlyLight = document.documentElement.classList.contains('light');
+          const nextIsLight = !currentlyLight;
+          localStorage.setItem('vortex_theme', nextIsLight ? 'light' : 'dark');
+          applyTheme(nextIsLight);
+        });
+      }
+
       // --- 1. Tab Navigation ---
       const tabButtons = document.querySelectorAll('.tab-btn');
       const tabPanels = {
@@ -1436,10 +1702,11 @@
       }
 
       function drawScene(nozzleX, nozzleY, fireX, fireBaseY, metrics) {
+        const isLight = document.documentElement.classList.contains('light');
         ctx.clearRect(0, 0, cw, ch);
 
         // Background subtle grid
-        ctx.strokeStyle = 'rgba(30, 41, 59, 0.55)';
+        ctx.strokeStyle = isLight ? 'rgba(203, 213, 225, 0.65)' : 'rgba(30, 41, 59, 0.55)';
         ctx.lineWidth = 1;
         const gridStep = 32;
         for (let x = 0; x < cw; x += gridStep) {
@@ -1457,7 +1724,7 @@
 
         // Floor / Lab Bench line
         const floorY = fireBaseY + 26;
-        ctx.strokeStyle = '#334155';
+        ctx.strokeStyle = isLight ? '#94a3b8' : '#334155';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, floorY);
@@ -1465,14 +1732,14 @@
         ctx.stroke();
 
         // Distance ruler marker between nozzle and fire
-        ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+        ctx.strokeStyle = isLight ? 'rgba(100, 116, 139, 0.45)' : 'rgba(148, 163, 184, 0.4)';
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
         ctx.moveTo(nozzleX, floorY + 16);
         ctx.lineTo(fireX, floorY + 16);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = isLight ? '#475569' : '#94a3b8';
         ctx.font = '600 11px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Jarak Tembak: ' + state.distance + ' cm', (nozzleX + fireX) / 2, floorY + 30);
@@ -1483,14 +1750,14 @@
         const tubeRadius = 38;
 
         // Control pack / 12V Battery + Amp box under/behind cylinder
-        ctx.fillStyle = '#1e293b';
-        ctx.strokeStyle = '#475569';
+        ctx.fillStyle = isLight ? '#ffffff' : '#1e293b';
+        ctx.strokeStyle = isLight ? '#cbd5e1' : '#475569';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.roundRect(tubeLeft + 6, nozzleY + tubeRadius + 6, tubeLen * 0.72, 26, 6);
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = '#f97316';
+        ctx.fillStyle = '#ea580c';
         ctx.font = 'bold 9px JetBrains Mono, monospace';
         ctx.textAlign = 'left';
         ctx.fillText('12V BAT + 30Hz AMP', tubeLeft + 12, nozzleY + tubeRadius + 22);
@@ -1509,11 +1776,11 @@
         ctx.stroke();
 
         // Internal cutaway view showing vibrating Subwoofer Cone
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
+        ctx.fillStyle = isLight ? 'rgba(241, 245, 249, 0.95)' : 'rgba(15, 23, 42, 0.82)';
         ctx.fillRect(tubeLeft + 10, nozzleY - tubeRadius + 5, tubeLen - 22, tubeRadius * 2 - 10);
 
         // Speaker Magnet & Frame
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = isLight ? '#94a3b8' : '#475569';
         ctx.fillRect(tubeLeft + 14, nozzleY - 14, 14, 28);
 
         // Vibrating Cone Excursion (amplitude inversely proportional to frequency)
@@ -1535,18 +1802,18 @@
         ctx.stroke();
 
         // Label on cylinder
-        ctx.fillStyle = '#cbd5e1';
+        ctx.fillStyle = isLight ? '#1e293b' : '#cbd5e1';
         ctx.font = 'bold 10px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('VORTEX TECH', tubeLeft + tubeLen * 0.62, nozzleY - 4);
-        ctx.fillStyle = '#38bdf8';
+        ctx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
         ctx.font = '600 9px JetBrains Mono, monospace';
         ctx.fillText(state.freq + ' Hz | ' + state.power + 'W', tubeLeft + tubeLen * 0.62, nozzleY + 10);
 
         // Collimator Front Cap & Aperture Hole
         const aperturePx = Math.max(8, (state.aperture / 18) * (tubeRadius * 1.8));
-        ctx.fillStyle = '#0f172a';
-        ctx.strokeStyle = '#94a3b8';
+        ctx.fillStyle = isLight ? '#334155' : '#0f172a';
+        ctx.strokeStyle = isLight ? '#64748b' : '#94a3b8';
         ctx.lineWidth = 2;
         // Top baffle lip
         ctx.fillRect(nozzleX - 6, nozzleY - tubeRadius, 8, tubeRadius - aperturePx / 2);
@@ -1606,15 +1873,15 @@
         });
 
         // --- Draw Burner / Fuel Tray ---
-        ctx.fillStyle = '#334155';
-        ctx.strokeStyle = '#64748b';
+        ctx.fillStyle = isLight ? '#e2e8f0' : '#334155';
+        ctx.strokeStyle = isLight ? '#94a3b8' : '#64748b';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.roundRect(fireX - 28, fireBaseY, 56, 26, 4);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = isLight ? '#334155' : '#94a3b8';
         ctx.font = 'bold 9px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(fuelConfigs[state.fuelType].name.toUpperCase(), fireX, fireBaseY + 16);
@@ -1636,7 +1903,7 @@
 
         // --- Draw Smoke Particles ---
         state.smokeParticles.forEach(function(sm) {
-          ctx.fillStyle = 'rgba(148, 163, 184, ' + sm.alpha + ')';
+          ctx.fillStyle = isLight ? ('rgba(100, 116, 139, ' + sm.alpha + ')') : ('rgba(148, 163, 184, ' + sm.alpha + ')');
           ctx.beginPath();
           ctx.arc(sm.x, sm.y, sm.radius, 0, Math.PI * 2);
           ctx.fill();
@@ -2121,10 +2388,11 @@
         }
 
         // Draw Scale Canvas
+        const isScaleLight = document.documentElement.classList.contains('light');
         scaleCtx.clearRect(0, 0, scw, sch);
 
         // Ground line
-        scaleCtx.strokeStyle = '#334155';
+        scaleCtx.strokeStyle = isScaleLight ? '#94a3b8' : '#334155';
         scaleCtx.lineWidth = 2;
         scaleCtx.beginPath();
         scaleCtx.moveTo(0, groundY);
@@ -2137,8 +2405,8 @@
         const bLeft = buildingX - bWidth / 2;
         const bTop = groundY - bHeight;
 
-        scaleCtx.fillStyle = '#1e293b';
-        scaleCtx.strokeStyle = '#475569';
+        scaleCtx.fillStyle = isScaleLight ? '#e2e8f0' : '#1e293b';
+        scaleCtx.strokeStyle = isScaleLight ? '#94a3b8' : '#475569';
         scaleCtx.lineWidth = 2;
         scaleCtx.fillRect(bLeft, bTop, bWidth, bHeight);
         scaleCtx.strokeRect(bLeft, bTop, bWidth, bHeight);
@@ -2155,7 +2423,7 @@
             } else if (scaleState.emberHeat > 35) {
               scaleCtx.fillStyle = 'rgba(220, 38, 38, 0.35)';
             } else {
-              scaleCtx.fillStyle = '#0f172a';
+              scaleCtx.fillStyle = isScaleLight ? '#cbd5e1' : '#0f172a';
             }
             scaleCtx.fillRect(wx, wy, 14, 18);
           }
@@ -2180,7 +2448,7 @@
         }
 
         // Draw Sonic Cannon / Truck / Drone Array on the left
-        scaleCtx.fillStyle = '#0f172a';
+        scaleCtx.fillStyle = isScaleLight ? '#ffffff' : '#0f172a';
         scaleCtx.strokeStyle = '#f97316';
         scaleCtx.lineWidth = 2;
         const cHeight = Math.min(76, 28 + Math.pow(scaleState.area, 0.32) * 7);
@@ -2190,7 +2458,7 @@
         scaleCtx.stroke();
 
         // Wheels / Base or Drone Rotors
-        scaleCtx.fillStyle = '#94a3b8';
+        scaleCtx.fillStyle = isScaleLight ? '#334155' : '#94a3b8';
         scaleCtx.font = 'bold 10px Inter, sans-serif';
         scaleCtx.textAlign = 'center';
         scaleCtx.fillText(scaleState.area > 90 ? 'SWARM DRONE ARRAY' : 'SONIC VORTEX CANNON', cannonX - 45, cannonY + 4);
