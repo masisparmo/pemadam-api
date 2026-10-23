@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vortex Tech — Simulator Interaktif, Fisika & Panduan Perakitan Pemadam Api Gelombang Suara</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f1f5f9;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .tab-active {
+      background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(234, 88, 12, 0.35);
+    }
+    input[type="range"] {
+      accent-color: #f97316;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">VORTEX TECH LAB</h1>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">ISIF 2026 Gold Medal</span>
+          </div>
+          <p class="text-xs text-slate-400">Simulator Fisika Pemadam Api Akustik (~30 Hz) & Panduan Rekayasa Prototipe</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800" aria-label="Menu Utama">
+        <button id="nav-sim" type="button" class="tab-btn tab-active px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all" data-tab="sim">
+          🔥 Lab Simulasi
+        </button>
+        <button id="nav-cara" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="cara">
+          💡 Cara Kerja Awam
+        </button>
+        <button id="nav-fisika" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="fisika">
+          ⚛️ Teori Fisika
+        </button>
+        <button id="nav-diy" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="diy">
+          🛠️ Cara Membuat Alat
+        </button>
+        <button id="nav-skala" type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all" data-tab="skala">
+          🏢 Skala Rumah &amp; Gedung
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- ==================== TAB 1: LAB SIMULASI INTERAKTIF ==================== -->
+    <section id="tab-sim" class="tab-panel space-y-6">
+      <!-- Top Status Banner -->
+      <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold text-orange-400 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-orange-400 animate-ping"></span>
+            Simulasi Real-Time Dinamika Akustik & Segitiga Api
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-white">Uji Coba Pemadaman Api dengan Gelombang Suara</h2>
+          <p class="text-sm text-slate-300 max-w-3xl">
+            Atur frekuensi suara, daya amplifier, bukaan kolimator, dan jarak tembak. Perhatikan bagaimana frekuensi rendah <strong>30–60 Hz</strong> membentuk cincin pusaran udara (<em>vortex ring</em>) yang memisahkan oksigen dari bahan bakar hingga api padam.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+          <button id="btn-toggle-wave" type="button" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2">
+            <span id="wave-btn-icon">🔊</span>
+            <span id="wave-btn-text">Tembakkan Gelombang</span>
+          </button>
+          <button id="btn-toggle-audio" type="button" class="px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5">
+            <span id="audio-btn-icon">🔇</span>
+            <span id="audio-btn-text">Suara Bass: OFF</span>
+          </button>
+          <button id="btn-reignite" type="button" class="px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 transition-all">
+            🔄 Nyalakan Api
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Simulator Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Canvas Display (8 cols) -->
+        <div class="lg:col-span-8 space-y-4">
+          <div class="glass-card rounded-2xl p-3 sm:p-4 relative overflow-hidden">
+            <!-- Live Telemetry Overlay Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5">
+                <span class="text-[11px] text-slate-400 block">Status Api (Integritas)</span>
+                <div class="flex items-baseline justify-between mt-0.5">
+                  <span id="metric-fire-integrity" class="text-lg font-extrabold mono text-orange-400">100%</span>
+                  <span id="metric-fire-badge" class="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 font-semibold">MENYALA</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+                  <div id="bar-fire-integrity" class="h-full bg-gradient-to-r from-red-500 to-amber-400 transition-all duration-150" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5">
+                <span class="text-[11px] text-slate-400 block">Frekuensi & Panjang Gel.</span>
+                <div class="flex items-baseline justify-between mt-0.5">
+                  <span id="metric-freq" class="text-lg font-extrabold mono text-cyan-400">30 Hz</span>
+                  <span id="metric-wavelength" class="text-xs mono text-slate-400">λ = 11.4 m</span>
+                </div>
+                <span id="metric-freq-zone" class="text-[10px] text-emerald-400 font-medium block mt-1">✓ Zona Efektif (30-60 Hz)</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5">
+                <span class="text-[11px] text-slate-400 block">Kecepatan Vortex Udara</span>
+                <div class="flex items-baseline justify-between mt-0.5">
+                  <span id="metric-vortex-speed" class="text-lg font-extrabold mono text-sky-400">0.0 m/s</span>
+                  <span id="metric-spl" class="text-xs mono text-slate-400">0 dB</span>
+                </div>
+                <span id="metric-vortex-desc" class="text-[10px] text-slate-400 block mt-1">Alat belum ditembakkan</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5">
+                <span class="text-[11px] text-slate-400 block">Kadar Oksigen Lokal Api</span>
+                <div class="flex items-baseline justify-between mt-0.5">
+                  <span id="metric-oxygen" class="text-lg font-extrabold mono text-blue-400">21.0%</span>
+                  <span id="metric-temp" class="text-xs mono text-amber-300">680 °C</span>
+                </div>
+                <span class="text-[10px] text-slate-400 block mt-1">Padam jika O₂ lokal &lt; 14%</span>
+              </div>
+            </div>
+
+            <!-- Interactive Canvas Container -->
+            <div id="canvas-container" class="relative w-full h-72 sm:h-96 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden">
+              <canvas id="sim-canvas" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- Legend & Diagnostic Bar -->
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 px-1">
+              <div class="flex flex-wrap items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-cyan-400 inline-block"></span> Cincin Pusaran (Vortex Ring)</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> Molekul Oksigen (O₂)</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> Uap Bahan Bakar</span>
+              </div>
+              <div id="sim-status-message" class="font-medium text-amber-300">
+                💡 Klik "Tembakkan Gelombang" pada 30 Hz untuk melihat cincin vortex memisahkan oksigen dari api.
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Frequency Presets -->
+          <div class="glass-card rounded-2xl p-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5">Preset Eksperimen Frekuensi (Klik untuk Menguji):</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              <button type="button" class="preset-btn px-3 py-2 rounded-xl text-left border border-slate-700 bg-slate-900/80 hover:border-orange-500/50 transition-all" data-freq="15" data-power="80" data-aperture="7" data-dist="40">
+                <span class="text-xs font-bold text-slate-200 block">15 Hz (Infrasonik)</span>
+                <span class="text-[10px] text-slate-400">Getaran lambat, kurang fokus</span>
+              </button>
+              <button type="button" class="preset-btn px-3 py-2 rounded-xl text-left border border-orange-500 bg-orange-500/10 hover:bg-orange-500/20 transition-all" data-freq="30" data-power="85" data-aperture="7" data-dist="35">
+                <span class="text-xs font-bold text-orange-300 block">30 Hz (Vortex Tech) ★</span>
+                <span class="text-[10px] text-orange-200/80">Setting emas Ángela Venegas</span>
+              </button>
+              <button type="button" class="preset-btn px-3 py-2 rounded-xl text-left border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all" data-freq="45" data-power="85" data-aperture="8" data-dist="35">
+                <span class="text-xs font-bold text-emerald-300 block">45 Hz (Bass GMU)</span>
+                <span class="text-[10px] text-emerald-200/80">Rentang optimal 30–60 Hz</span>
+              </button>
+              <button type="button" class="preset-btn px-3 py-2 rounded-xl text-left border border-slate-700 bg-slate-900/80 hover:border-orange-500/50 transition-all" data-freq="150" data-power="85" data-aperture="7" data-dist="35">
+                <span class="text-xs font-bold text-slate-200 block">150 Hz (Mid-Bass)</span>
+                <span class="text-[10px] text-slate-400">Api hanya bergoyang</span>
+              </button>
+              <button type="button" class="preset-btn px-3 py-2 rounded-xl text-left border border-slate-700 bg-slate-900/80 hover:border-orange-500/50 transition-all" data-freq="400" data-power="100" data-aperture="7" data-dist="35">
+                <span class="text-xs font-bold text-slate-200 block">400 Hz (Nada Tinggi)</span>
+                <span class="text-[10px] text-slate-400">Simpangan kecil, gagal padam</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Control Panel (4 cols) -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="font-bold text-base text-white">🎛️ Panel Kendali Parameter</h3>
+              <button id="btn-reset-params" type="button" class="text-xs text-orange-400 hover:text-orange-300 font-semibold">Reset Optimal</button>
+            </div>
+
+            <!-- Control 1: Frequency -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-freq" class="text-slate-300">1. Frekuensi Suara (Hz)</label>
+                <span id="label-freq" class="mono text-cyan-400 font-bold">30 Hz</span>
+              </div>
+              <input id="slider-freq" type="range" min="10" max="400" step="1" value="30" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>10 Hz</span>
+                <span class="text-emerald-400 font-semibold">Sweet Spot: 30–60 Hz</span>
+                <span>400 Hz</span>
+              </div>
+            </div>
+
+            <!-- Control 2: Amplifier Power -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-power" class="text-slate-300">2. Daya Amplifier (Watt)</label>
+                <span id="label-power" class="mono text-orange-400 font-bold">85 W</span>
+              </div>
+              <input id="slider-power" type="range" min="15" max="150" step="5" value="85" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>15 W (Lemah)</span>
+                <span>60–100 W (Ideal)</span>
+                <span>150 W (Kuat)</span>
+              </div>
+            </div>
+
+            <!-- Control 3: Collimator Aperture -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-aperture" class="text-slate-300">3. Diameter Lubang Kolimator</label>
+                <span id="label-aperture" class="mono text-sky-400 font-bold">7.0 cm</span>
+              </div>
+              <input id="slider-aperture" type="range" min="3" max="18" step="0.5" value="7" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>3 cm (Tercekik)</span>
+                <span class="text-sky-400">6–9 cm (Fokus Vortex)</span>
+                <span>18 cm (Menyebar)</span>
+              </div>
+            </div>
+
+            <!-- Control 4: Distance -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-dist" class="text-slate-300">4. Jarak Moncong ke Api</label>
+                <span id="label-dist" class="mono text-amber-400 font-bold">35 cm</span>
+              </div>
+              <input id="slider-dist" type="range" min="15" max="120" step="5" value="35" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>15 cm (Dekat)</span>
+                <span>30–60 cm (Efektif)</span>
+                <span>120 cm (Jauh)</span>
+              </div>
+            </div>
+
+            <!-- Control 5: Fuel Type -->
+            <div class="space-y-1.5">
+              <label for="select-fuel" class="text-xs font-semibold text-slate-300 block">5. Jenis Bahan Bakar (Uji Kelas Api)</label>
+              <select id="select-fuel" class="w-full rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 px-3 py-2 focus:outline-none focus:border-orange-500">
+                <option value="candle">Lilin Parafin (Sangat Mudah Padam)</option>
+                <option value="alcohol" selected>Cairan Alkohol / Bensin Kecil (Kelas B)</option>
+                <option value="grease">Minyak Goreng / Lemak Dapur (Kelas K/F)</option>
+                <option value="wood">Kayu & Kertas Menyala (Kelas A - Butuh Daya Tinggi)</option>
+              </select>
+            </div>
+
+            <!-- Real-time Physics Diagnosis Box -->
+            <div class="rounded-xl bg-slate-900/95 border border-slate-800 p-3.5 space-y-2">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-orange-400">📊 Analisis Fisika Saat Ini:</h4>
+              <p id="physics-live-explanation" class="text-xs text-slate-300 leading-relaxed">
+                Pada frekuensi <strong>30 Hz</strong>, membran subwoofer bergerak maju-mundur 30 kali per detik dengan simpangan besar. Udara yang terdorong melewati lubang kolimator 7 cm menggulung menjadi <strong>cincin pusaran (vortex ring)</strong> yang menghantam dasar api dan memisahkan oksigen dari uap bahan bakar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: CARA KERJA AWAM ==================== -->
+    <section id="tab-cara" class="tab-panel hidden space-y-6">
+      <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+        <div class="max-w-3xl space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-orange-400">Penjelasan Bahasa Awam</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Bagaimana Suara Bisa Memadamkan Api Tanpa Air?</h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            Bayangkan saat Anda meniup lilin ulang tahun. Lilin padam bukan karena ludah atau air, melainkan karena <strong>embusan udara</strong> Anda memisahkan uap panas lilin dari oksigen di sekitarnya. <strong>Vortex Tech</strong> karya Ángela Karime Venegas Hernández melakukan hal yang sama, tetapi menggunakan <strong>"peluru cincin udara tak kasatmata"</strong> yang ditembakkan oleh suara bass berfrekuensi sangat rendah (30 Hz) sebanyak <strong>30 kali setiap detik</strong>!
+          </p>
+        </div>
+
+        <!-- 4 Interactive Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-3">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 hover:border-orange-500/50 transition-all">
+            <div class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-400 font-extrabold flex items-center justify-center text-sm">1</div>
+            <h3 class="font-bold text-white text-base">Detak Bass 30 Hz</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Pembangkit frekuensi mengirimkan nada bass sangat rendah (30 Hz) ke amplifier dan speaker. Nada ini membuat membran speaker bergetar maju-mundur dengan dorongan fisik yang kuat sebanyak <strong>30 kali per detik</strong>.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 hover:border-cyan-500/50 transition-all">
+            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 font-extrabold flex items-center justify-center text-sm">2</div>
+            <h3 class="font-bold text-white text-base">Tabung Kolimator</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Tanpa tabung, suara akan menyebar ke segala arah dan tenaganya hilang. Tabung silinder dengan <strong>lubang moncong sempit (kolimator)</strong> memfokuskan gelombang suara agar lurus ke satu titik sasaran.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 hover:border-sky-500/50 transition-all">
+            <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 font-extrabold flex items-center justify-center text-sm">3</div>
+            <h3 class="font-bold text-white text-base">Cincin Pusaran (Vortex)</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Saat dorongan udara melewati lubang sempit di ujung tabung, tepian udara menggulung membentuk <strong>cincin pusaran berputar (vortex ring)</strong>—mirip cincin asap yang melesat lurus menembus udara.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 hover:border-emerald-500/50 transition-all">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 font-extrabold flex items-center justify-center text-sm">4</div>
+            <h3 class="font-bold text-white text-base">Meruntuhkan Segitiga Api</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Tembakan 30 cincin vortex per detik mengacak-acak dasar api, <strong>mengusir molekul oksigen</strong> dari uap bahan bakar, dan mendinginkan suhu nyala. Tanpa oksigen, api langsung mati lemas dalam hitungan detik!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Comparison Analogy & Why 30 Hz -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🎯</span> Mengapa Harus Frekuensi Rendah (30–60 Hz)?
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Banyak orang mengira suara melengking tinggi (seperti penyanyi opera yang memecahkan gelas) bisa mematikan api. Namun riset <strong>George Mason University</strong> dan <strong>Vortex Tech</strong> membuktikan sebaliknya:
+          </p>
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30">
+              <div class="font-bold text-xs sm:text-sm text-red-300">❌ Frekuensi Tinggi (&gt; 200 Hz hingga Ultrasonik 20.000 Hz)</div>
+              <p class="text-xs text-slate-300 mt-1">
+                Getarannya sangat cepat tetapi jarak gerak maju-mundur membran speaker sangat pendek (mikrometer). Udara hanya bergetar tipis di tempat sehingga nyala api hanya bergetar kecil namun tidak padam.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+              <div class="font-bold text-xs sm:text-sm text-emerald-300">✅ Frekuensi Bass Rendah (30 Hz – 60 Hz)</div>
+              <p class="text-xs text-slate-300 mt-1">
+                Membran subwoofer bergerak maju-mundur sejauh beberapa milimeter hingga sentimeter, memompa volume udara yang besar pada setiap detaknya. Dorongan makro inilah yang sanggup menyapu bersih oksigen di pangkal api.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>⚖️</span> Perbandingan APAR Biasa vs Vortex Tech
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-700 text-slate-400">
+                  <th class="py-2 pr-2">Aspek</th>
+                  <th class="py-2 px-2">APAR Kimia / Air</th>
+                  <th class="py-2 pl-2 text-orange-400">Vortex Tech (30 Hz)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-300">
+                <tr>
+                  <td class="py-2.5 pr-2 font-semibold">Media Pemadam</td>
+                  <td class="py-2.5 px-2">Air, Busa, Serbuk Kimia, CO₂</td>
+                  <td class="py-2.5 pl-2 text-emerald-300 font-medium">Gelombang Tekanan Udara</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 pr-2 font-semibold">Residu & Kerusakan</td>
+                  <td class="py-2.5 px-2">Merusak elektronik & kotor</td>
+                  <td class="py-2.5 pl-2 text-emerald-300 font-medium">100% Bersih (0% Residu)</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 pr-2 font-semibold">Isi Ulang (Refill)</td>
+                  <td class="py-2.5 px-2">Habis pakai, wajib isi tabung</td>
+                  <td class="py-2.5 pl-2 text-emerald-300 font-medium">Cukup cas baterai 12V</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 pr-2 font-semibold">Gravitasi Nol (Antariksa)</td>
+                  <td class="py-2.5 px-2">Cairan/bubuk melayang acak</td>
+                  <td class="py-2.5 pl-2 text-emerald-300 font-medium">Tetap terarah di ruang angkasa</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 pr-2 font-semibold">Keterbatasan Saat Ini</td>
+                  <td class="py-2.5 px-2">Efektif untuk api besar</td>
+                  <td class="py-2.5 pl-2 text-amber-300">Masih skala api kecil/menengah &amp; tidak mendinginkan bara kayu dalam</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: DASAR TEORI FISIKA ==================== -->
+    <section id="tab-fisika" class="tab-panel hidden space-y-6">
+      <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+        <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">Landasan Ilmiah & Mekanika Fluida-Akustik</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">4 Hukum Fisika di Balik Pemadam Api Akustik</h2>
+        <p class="text-sm text-slate-300 max-w-4xl leading-relaxed">
+          Prinsip pemadaman api dengan gelombang suara telah diteliti secara mendalam oleh <strong>DARPA (Instant Fire Suppression Program)</strong>, <strong>Harvard University</strong>, <strong>George Mason University (Seth Robertson &amp; Viet Tran)</strong>, dan dioptimalkan menjadi perangkat portabel <strong>Vortex Tech</strong> oleh <strong>Ángela Karime Venegas Hernández</strong>. Berikut empat mekanisme fisika utamanya:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+          <!-- Theory 1 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 text-xs font-bold">1. Akustika &amp; Mekanika Gelombang</span>
+              <span class="mono text-xs text-slate-400">λ = v / f</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">Gelombang Tekanan Longitudinal &amp; Amplitudo Simpangan</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Gelombang suara di udara adalah gelombang longitudinal yang terdiri dari fase <strong>rapatan (kompresi / tekanan tinggi)</strong> dan <strong>renggangan (rarefaksi / tekanan rendah)</strong>. Untuk daya akustik yang sama, simpangan perpindahan partikel udara ($\xi$) berbanding terbalik dengan frekuensi:
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-cyan-300">
+              ξ = v_partikel / (2π · f)  &nbsp;|&nbsp; Pada f = 30 Hz, λ = 343 / 30 = 11,43 meter
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Karena frekuensi $f = 30\text{ Hz}$ sangat rendah, simpangan gerak maju-mundur molekul udara menjadi jauh lebih besar dibandingkan frekuensi tinggi. Hal ini menghasilkan guncangan mekanis makroskopis pada zona pembakaran.
+            </p>
+          </div>
+
+          <!-- Theory 2 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 text-xs font-bold">2. Dinamika Fluida (Vortex Ring)</span>
+              <span class="mono text-xs text-slate-400">L / D ≈ 1.5 – 4.0</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">Synthetic Jet &amp; Cincin Pusaran Toroidal (Vortex Rings)</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Ketika pulsa tekanan 30 Hz dipaksa melewati bukaan sempit (<em>orifice aperture</em>) di ujung kolimator, lapisan batas udara di tepi lubang mengalami pemisahan aliran (<em>flow separation</em>) dan menggulung menjadi <strong>cincin pusaran toroidal (acoustic vortex ring)</strong>.
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-sky-300">
+              Γ ∝ u₀² · Δt  (Sirkulasi Vortex menjaga struktur cincin tetap fokus)
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Berbeda dengan gelombang suara biasa yang melemah cepat secara sferis ($I \propto 1/r^2$), cincin vortex membawa momentum fluida terarah lurus ke depan (<em>synthetic jet</em>) sehingga mampu menghantam pangkal api dari jarak puluhan sentimeter hingga meter.
+            </p>
+          </div>
+
+          <!-- Theory 3 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 text-xs font-bold">3. Termodinamika Pembakaran</span>
+              <span class="mono text-xs text-slate-400">q̇_loss &gt; q̇_gen</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">Penipisan Lapisan Batas Termal (Boundary Layer Thinning)</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Berdasarkan laporan riset <strong>DARPA Instant Fire Suppression</strong>, osilasi kecepatan udara di sekitar nyala api menipiskan <em>thermal boundary layer</em> di atas permukaan bahan bakar.
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-orange-300">
+              δ_T ≈ L / √Re  &nbsp;→&nbsp; Kecepatan akustik naik ⇒ δ_T menipis ⇒ Pendinginan cepat
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Selain itu, getaran akustik menyebarkan nyala api ke area yang lebih luas, menurunkan kerapatan panas lokal di bawah <strong>suhu nyala minimum (ignition temperature)</strong>.
+            </p>
+          </div>
+
+          <!-- Theory 4 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold">4. Kinetika Kimia (Bilangan Damköhler)</span>
+              <span class="mono text-xs text-slate-400">Da = τ_flow / τ_chem &lt; 1</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">Regangan Nyala Kritis (Strain-Rate Extinction)</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Api membutuhkan waktu tertentu ($\tau_{\text{chem}}$) agar molekul uap bahan bakar dan oksigen ($O_2$) bereaksi sempurna. Tembakan 30 pulsa vortex per detik menciptakan laju regangan aliran ($\tau_{\text{flow}}$) yang sangat singkat.
+            </p>
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mono text-xs text-emerald-300">
+              Jika τ_flow &lt; τ_chem (Da &lt; Da_kritis) ⇒ Reaksi Rantai Pembakaran Putus!
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Oksigen dan uap bahan bakar dipisahkan lebih cepat daripada kecepatan reaksi kimia pembakaran itu sendiri, sehingga api langsung padam seketika (<em>blow-off / suffocation</em>).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Physics Calculator -->
+      <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+        <h3 class="text-lg font-bold text-white">🧮 Kalkulator Fisika Gelombang Akustik &amp; Kolimator</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+            <label for="calc-freq" class="text-xs font-semibold text-slate-300 block">Frekuensi Input (Hz):</label>
+            <input id="calc-freq" type="number" min="10" max="1000" value="30" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white mono text-sm">
+            <p class="text-[11px] text-slate-400">Kecepatan rambat suara di udara (20°C) = 343 m/s</p>
+          </div>
+          <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+            <label for="calc-temp-air" class="text-xs font-semibold text-slate-300 block">Suhu Udara Sekitar (°C):</label>
+            <input id="calc-temp-air" type="number" min="0" max="100" value="28" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white mono text-sm">
+            <p class="text-[11px] text-slate-400">Memengaruhi cepat rambat bunyi: v = 331.3 + 0.606·T</p>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-cyan-500/30 space-y-1.5">
+            <span class="text-xs text-cyan-400 font-bold block">Hasil Perhitungan Fisika:</span>
+            <div class="text-xs text-slate-300 flex justify-between"><span>Cepat Rambat Bunyi (v):</span> <strong id="out-sound-speed" class="mono text-white">348.3 m/s</strong></div>
+            <div class="text-xs text-slate-300 flex justify-between"><span>Panjang Gelombang (λ):</span> <strong id="out-wavelength" class="mono text-cyan-300">11.61 m</strong></div>
+            <div class="text-xs text-slate-300 flex justify-between"><span>Periode Satu Pulsa (T):</span> <strong id="out-period" class="mono text-amber-300">33.33 ms</strong></div>
+            <div class="text-xs text-slate-300 flex justify-between"><span>Rasio Simpangan Relatif:</span> <strong id="out-excursion" class="mono text-emerald-300">100% (Maksimal)</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: CARA MEMBUAT ALAT (DIY PROTOTIPE) ==================== -->
+    <section id="tab-diy" class="tab-panel hidden space-y-6">
+      <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Panduan Rekayasa &amp; Perakitan Edukasi</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Cara Membuat Prototipe Pemadam Api Gelombang Suara</h2>
+            <p class="text-sm text-slate-300 mt-1">
+              Berdasarkan arsitektur 4 komponen utama <strong>Vortex Tech (Ángela Venegas)</strong> dan prototipe <strong>George Mason University</strong>.
+            </p>
+          </div>
+          <div class="px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs max-w-xs">
+            ⚠️ <strong>Catatan Keselamatan:</strong> Gunakan hanya untuk eksperimen sains skala kecil (seperti api lilin) di ruang terbuka dengan pendampingan dan APAR cadangan.
+          </div>
+        </div>
+
+        <!-- Interactive Schematic Diagram -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">🔌 Skema Alur Rangkaian (Klik Komponen untuk Detail Perakitan):</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            <button type="button" class="diy-part-btn text-left p-4 rounded-2xl border border-orange-500 bg-orange-500/10 transition-all space-y-1" data-part="battery">
+              <span class="text-xs font-mono text-orange-300">BLOK 1 • DAYA</span>
+              <div class="font-bold text-white text-sm">🔋 Baterai 12V–24V DC</div>
+              <p class="text-[11px] text-slate-300">Sumber energi portabel arus tinggi</p>
+            </button>
+
+            <button type="button" class="diy-part-btn text-left p-4 rounded-2xl border border-slate-800 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-part="generator">
+              <span class="text-xs font-mono text-cyan-300">BLOK 2 • SINYAL</span>
+              <div class="font-bold text-white text-sm">〰️ Generator 30 Hz</div>
+              <p class="text-[11px] text-slate-300">Pembangkit gelombang sinus murni</p>
+            </button>
+
+            <button type="button" class="diy-part-btn text-left p-4 rounded-2xl border border-slate-800 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-part="amp">
+              <span class="text-xs font-mono text-amber-300">BLOK 3 • PENGUAT</span>
+              <div class="font-bold text-white text-sm">⚡ Amplifier Subwoofer</div>
+              <p class="text-[11px] text-slate-300">Mono Class-D 50W–100W</p>
+            </button>
+
+            <button type="button" class="diy-part-btn text-left p-4 rounded-2xl border border-slate-800 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-part="speaker">
+              <span class="text-xs font-mono text-emerald-300">BLOK 4 • TRANSDUSER</span>
+              <div class="font-bold text-white text-sm">🔊 Subwoofer 6.5"–8"</div>
+              <p class="text-[11px] text-slate-300">Speaker bass simpangan jauh</p>
+            </button>
+
+            <button type="button" class="diy-part-btn text-left p-4 rounded-2xl border border-slate-800 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-part="collimator">
+              <span class="text-xs font-mono text-sky-300">BLOK 5 • VORTEX</span>
+              <div class="font-bold text-white text-sm">🎯 Tabung Kolimator</div>
+              <p class="text-[11px] text-slate-300">Silinder pengarah cincin pusaran</p>
+            </button>
+          </div>
+
+          <!-- Selected Component Detail Box -->
+          <div id="diy-part-detail" class="p-5 rounded-2xl bg-slate-900 border border-slate-700 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 id="diy-detail-title" class="text-base sm:text-lg font-bold text-orange-400">1. Sumber Daya: Baterai 12V–24V DC</h4>
+              <span id="diy-detail-spec" class="text-xs mono px-2.5 py-1 rounded bg-slate-800 text-slate-200">12V 7Ah SLA / 3S-6S Li-Ion</span>
+            </div>
+            <p id="diy-detail-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Dalam wawancara bersama N+, Ángela Venegas menjelaskan bahwa prototipe Vortex Tech menggunakan <strong>baterai 12 Volt</strong> agar alat dapat dibawa secara portabel (dimasukkan ke tas ransel/selempang). Untuk daya dorong ekstra pada amplifier Class-D seperti TPA3116D2, Anda bisa menggunakan baterai Lithium-Ion 3S (12.6V) hingga 5S/6S (18V–24V) dengan kapasitas arus minimal 5 Ampere, dilengkapi sakelar utama (Main Switch) dan sekring pengaman (Fuse 10A).
+            </p>
+            <div id="diy-detail-wiring" class="text-xs mono text-emerald-300 pt-1">
+              📌 Koneksi: Kutub (+) Baterai → Fuse 10A → Sakelar → Terminal VCC (+12V/24V) Amplifier &amp; Step-Down 5V (untuk Generator Frekuensi).
+            </div>
+          </div>
+        </div>
+
+        <!-- Collimator Dimension Calculator & Step-by-Step Build -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+          <!-- Custom Dimension Calculator (5 cols) -->
+          <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <h3 class="text-base font-bold text-white">📐 Kalkulator Ukuran Tabung Kolimator</h3>
+            <p class="text-xs text-slate-400">
+              Masukkan ukuran speaker subwoofer yang Anda miliki untuk menghitung dimensi tabung silinder dan diameter lubang moncong (<em>orifice</em>) yang optimal mencetak cincin vortex:
+            </p>
+            <div class="space-y-3">
+              <div>
+                <label for="diy-speaker-inch" class="text-xs font-semibold text-slate-300 block mb-1">Diameter Speaker Subwoofer (Inci):</label>
+                <select id="diy-speaker-inch" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white">
+                  <option value="5">5 Inci (Mini / Portabel Ringan - Uji Lilin)</option>
+                  <option value="6.5" selected>6.5 Inci (Standar Portabel Vortex Tech)</option>
+                  <option value="8">8 Inci (Daya Menengah-Kuat)</option>
+                  <option value="10">10 Inci (Skala Laboratorium GMU)</option>
+                </select>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
+                <div class="flex justify-between"><span class="text-slate-400">Diameter Dalam Tabung (D):</span> <strong id="diy-out-tube-d" class="mono text-white">17.0 cm (Pipa PVC 6")</strong></div>
+                <div class="flex justify-between"><span class="text-slate-400">Panjang Tabung Ideal (L):</span> <strong id="diy-out-tube-l" class="mono text-cyan-300">34.0 – 42.0 cm</strong></div>
+                <div class="flex justify-between"><span class="text-slate-400">Diameter Lubang Moncong (d):</span> <strong id="diy-out-orifice" class="mono text-orange-400">7.5 cm (Rasio d/D ≈ 0.45)</strong></div>
+                <div class="flex justify-between"><span class="text-slate-400">Daya Amplifier Disarankan:</span> <strong id="diy-out-amp" class="mono text-emerald-300">50W – 100W Mono</strong></div>
+              </div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">
+                💡 <strong>Rahasia Desain:</strong> Jangan biarkan ujung depan pipa terbuka penuh! Pasang tutup pipa (<em>end-cap</em>) atau sekat akrilik/karton tebal di ujung depan, lalu lubangi bagian tengahnya dengan diameter <strong>~40%–50% dari diameter tabung</strong>. Penyempitan inilah yang memicu pembentukan <em>vortex ring</em>.
+              </p>
+            </div>
+          </div>
+
+          <!-- 5 Step Assembly Guide (7 cols) -->
+          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <h3 class="text-base font-bold text-white">🔧 5 Langkah Merakit Alat Secara Mandiri</h3>
+            <ol class="space-y-3 text-xs sm:text-sm text-slate-300">
+              <li class="flex gap-3 items-start">
+                <span class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                <div>
+                  <strong class="text-white">Siapkan Tabung Silinder (Kolimator):</strong> Gunakan pipa PVC, tabung karton tebal (<em>cardboard tube</em>), atau ember silinder sepanjang 30–45 cm yang diameternya pas dengan bingkai luar speaker subwoofer (misal 6 inci untuk subwoofer 6.5 inci).
+                </div>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                <div>
+                  <strong class="text-white">Pasang Subwoofer Kedap Udara di Ujung Belakang:</strong> Sekrupkan speaker menghadap ke dalam tabung. Pastikan celah antara pinggiran speaker dan dinding tabung <strong>rapat kedap udara</strong> (gunakan lem silikon atau <em>foam tape</em>) agar tekanan udara tidak bocor ke samping.
+                </div>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                <div>
+                  <strong class="text-white">Buat Moncong Pembentuk Vortex (Nozzle Aperture):</strong> Tutup ujung depan tabung dengan penutup datar berlubang lingkaran tepat di tengah (diameter sekitar 6–8 cm). Tepi lubang yang tegas akan menggulung hembusan bass menjadi cincin vortex.
+                </div>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
+                <div>
+                  <strong class="text-white">Rakit Pembangkit Frekuensi &amp; Amplifier:</strong> Hubungkan output pembangkit sinyal (bisa menggunakan modul <em>function generator</em> XR2206, Arduino DDS, atau aplikasi <em>Tone Generator</em> di ponsel melalui kabel AUX 3.5mm) ke input <strong>Amplifier Mono Subwoofer TPA3116D2 (100W)</strong> yang ditenagai baterai 12V–24V.Pasang tombol tekan (<em>push button trigger</em>) pada gagang tabung.
+                </div>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center shrink-0 mt-0.5">5</span>
+                <div>
+                  <strong class="text-white">Kalibrasi &amp; Pengujian Bertahap:</strong> Setel gelombang pada bentuk <strong>Sine Wave (Gelombang Sinus)</strong> di angka <strong>30 Hz hingga 45 Hz</strong>. Mulailah dengan mengarahkan moncong tabung ke nyala lilin dari jarak 30 cm. Rasakan hembusan pulsa udara di depan lubang moncong, lalu naikkan volume amplifier secara bertahap hingga api langsung padam!
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: SIMULASI SKALA KEBAKARAN BESAR (RUMAH & GEDUNG) ==================== -->
+    <section id="tab-skala" class="tab-panel hidden space-y-6">
+      <!-- Top Header Banner -->
+      <div class="glass-card rounded-2xl p-5 sm:p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            Kalkulator Rekayasa &amp; Simulator Pemadaman Skala Penuh (Full-Scale Fire Engineering)
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-white">Simulasi Spesifikasi Alat untuk Kebakaran Rumah &amp; Gedung</h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+            Prototipe tangan (12V, 85W) efektif untuk api kecil hingga jarak ~1,5 meter. Untuk memadamkan <strong>kebakaran rumah atau gedung bertingkat</strong>, alat harus melawan <em>buoyant fire plume</em> (arus konveksi panas ke atas) dan mencegah <em>re-ignition</em> (penyalaan ulang bara panas). Pilih skenario atau geser parameter di bawah untuk menghitung spesifikasi alat yang dibutuhkan.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+          <button id="btn-scale-fire-toggle" type="button" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2">
+            <span id="scale-wave-icon">🔊</span>
+            <span id="scale-wave-text">Aktifkan Meriam Vortex</span>
+          </button>
+          <button id="btn-scale-hybrid" type="button" class="px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition-all">
+            ❄️ Pendingin Kabut Hibrida: ON
+          </button>
+          <button id="btn-scale-reignite" type="button" class="px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-all">
+            🔄 Reset Kebakaran
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Real-World Fire Scale Scenario Presets -->
+      <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Pilih Skenario Skala Kebakaran Nyata:</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <button type="button" class="scale-preset-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-scenario="kitchen" data-area="2" data-dist="3" data-type="surface">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400">SKALA 1 • DAPUR RUMAH</span>
+              <span class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">~150 kW</span>
+            </div>
+            <div class="font-bold text-white text-sm">🍳 Api Kompor / Dapur (2 m²)</div>
+            <p class="text-[11px] text-slate-400">Unit ransel portabel daya tinggi (300 W)</p>
+          </button>
+
+          <button type="button" class="scale-preset-btn text-left p-3.5 rounded-xl border border-orange-500 bg-orange-500/10 transition-all space-y-1" data-scenario="room" data-area="16" data-dist="6" data-type="structural">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-orange-400">SKALA 2 • 1 RUANGAN RUMAH</span>
+              <span class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">~1.8 MW</span>
+            </div>
+            <div class="font-bold text-white text-sm">🛋️ Kamar / Ruang Tamu (16 m²)</div>
+            <p class="text-[11px] text-slate-300">Troli Taktis Multi-Subwoofer (3,5 kW)</p>
+          </button>
+
+          <button type="button" class="scale-preset-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-scenario="house" data-area="65" data-dist="14" data-type="structural">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400">SKALA 3 • RUMAH PENUH</span>
+              <span class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">~8.5 MW</span>
+            </div>
+            <div class="font-bold text-white text-sm">🏠 Rumah 1–2 Lantai (65 m²)</div>
+            <p class="text-[11px] text-slate-400">Meriam Sonik Truk Pemadam (22 kW)</p>
+          </button>
+
+          <button type="button" class="scale-preset-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1" data-scenario="building" data-area="160" data-dist="22" data-type="highrise">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-red-400">SKALA 4 • GEDUNG / GUDANG</span>
+              <span class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">~24.0 MW</span>
+            </div>
+            <div class="font-bold text-white text-sm">🏢 Lantai Gedung / Pabrik (160 m²)</div>
+            <p class="text-[11px] text-slate-400">Swarm Drone Array + Turret (68 kW)</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Grid: Visual Simulation + Controls + Engineering Spec Output -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 Cols: Visual Canvas + Required Hardware Spec Cards -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="glass-card rounded-2xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 id="scale-scene-title" class="text-base font-bold text-white">Simulasi Taktis: Kebakaran Kamar / Ruang Tamu (16 m²)</h3>
+                <p id="scale-scene-subtitle" class="text-xs text-slate-400">Kecepatan Arus Api ke Atas (Plume Velocity): 4.8 m/s | Target Kecepatan Vortex: &gt; 7.2 m/s</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs text-slate-400">Status Api:</span>
+                <span id="scale-fire-status-badge" class="px-2.5 py-1 rounded-lg text-xs font-extrabold mono bg-red-500/20 text-red-300 border border-red-500/30">BERKOBAR (100%)</span>
+                <button id="btn-scale-ignite-inline" type="button" class="px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow transition-all">
+                  🔥 Nyalakan Api
+                </button>
+                <button id="btn-scale-cannon-inline" type="button" class="px-3 py-1 rounded-lg text-xs font-bold bg-orange-600 hover:bg-orange-500 text-white shadow transition-all">
+                  🔊 Tembakkan Vortex
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Container for Large Scale Fire -->
+            <div id="scale-canvas-container" class="relative w-full h-72 sm:h-80 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden">
+              <canvas id="scale-canvas" class="w-full h-full block"></canvas>
+            </div>
+
+            <div id="scale-live-status" class="text-xs font-medium text-cyan-300 bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2.5">
+              💡 Meriam Vortex Aktif: Gelombang 28–35 Hz memukul mundur lidah api, sementara kabut air mikro mendinginkan bara struktur agar tidak menyala kembali.
+            </div>
+          </div>
+
+          <!-- Detailed Hardware Specification Blueprint Table -->
+          <div class="glass-card rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-orange-400">Hasil Perhitungan Rekayasa Akustik</span>
+                <h3 class="text-lg font-extrabold text-white">Spesifikasi Alat Pemadam yang Dibutuhkan</h3>
+              </div>
+              <span id="spec-platform-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                Troli Taktis / Robot Beroda
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Daya Amplifier Total</span>
+                <strong id="spec-amp-power" class="text-base sm:text-lg font-extrabold mono text-orange-400">3.500 W (3,5 kW)</strong>
+                <span id="spec-amp-detail" class="text-[10px] text-slate-400 block mt-0.5">Class-D High-Current Bridge</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Konfigurasi Subwoofer</span>
+                <strong id="spec-sub-array" class="text-base sm:text-lg font-extrabold mono text-cyan-400">4× Driver 15"</strong>
+                <span id="spec-sub-detail" class="text-[10px] text-slate-400 block mt-0.5">Xmax ≥ 22 mm (Long-Throw)</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Frekuensi Kerja Optimal</span>
+                <strong id="spec-opt-freq" class="text-base sm:text-lg font-extrabold mono text-emerald-400">28 Hz – 35 Hz</strong>
+                <span class="text-[10px] text-slate-400 block mt-0.5">Gelombang Sinus / Pulsa Vortex</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Dimensi Meriam Kolimator</span>
+                <strong id="spec-collimator-dim" class="text-sm sm:text-base font-extrabold mono text-sky-400">Ø 75 cm × P 160 cm</strong>
+                <span id="spec-orifice-dim" class="text-[10px] text-slate-400 block mt-0.5">Lubang Moncong (Orifice): Ø 34 cm</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Tekanan Suara (SPL @ 1m)</span>
+                <strong id="spec-spl-level" class="text-base sm:text-lg font-extrabold mono text-amber-400">142 dB SPL</strong>
+                <span id="spec-safety-note" class="text-[10px] text-red-300 block mt-0.5">⚠ Wajib Pelindung Telinga / Kendali Jauh</span>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <span class="text-[11px] text-slate-400 block">Suplai Daya &amp; Baterai</span>
+                <strong id="spec-power-supply" class="text-sm sm:text-base font-extrabold mono text-purple-300">48V DC / 3,2 kWh</strong>
+                <span id="spec-weight-est" class="text-[10px] text-slate-400 block mt-0.5">Estimasi Bobot Total: ~65 kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Custom Sliders & Real-World Engineering Analysis -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-card rounded-2xl p-5 space-y-4">
+            <h3 class="font-bold text-base text-white border-b border-slate-800 pb-2.5">🎚️ Parameter Skala Kebakaran</h3>
+
+            <!-- Slider 1: Fire Area -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-scale-area" class="text-slate-300">1. Luas Area Terbakar (m²)</label>
+                <span id="label-scale-area" class="mono text-orange-400 font-bold">16 m² (~1800 kW)</span>
+              </div>
+              <input id="slider-scale-area" type="range" min="1" max="200" step="1" value="16" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>1 m² (Dapur)</span>
+                <span>20 m² (Kamar)</span>
+                <span>70 m² (Rumah)</span>
+                <span>200 m² (Gedung)</span>
+              </div>
+            </div>
+
+            <!-- Slider 2: Standoff Distance -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <label for="slider-scale-dist" class="text-slate-300">2. Jarak Tembak Aman (Meter)</label>
+                <span id="label-scale-dist" class="mono text-cyan-400 font-bold">6 meter</span>
+              </div>
+              <input id="slider-scale-dist" type="range" min="2" max="30" step="1" value="6" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>2 m (Dekat)</span>
+                <span>10 m (Jarak Jalan)</span>
+                <span>30 m (Jarak Gedung)</span>
+              </div>
+            </div>
+
+            <!-- Select 3: Fire Material / Building Type -->
+            <div class="space-y-1.5">
+              <label for="select-scale-type" class="text-xs font-semibold text-slate-300 block">3. Karakteristik Struktur &amp; Bahan Bakar</label>
+              <select id="select-scale-type" class="w-full rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 px-3 py-2 focus:outline-none focus:border-orange-500">
+                <option value="surface">Api Cairan / Gas / Permukaan Tanpa Bara (Paling Efektif)</option>
+                <option value="structural" selected>Perabotan Rumah &amp; Struktur Kayu (Menghasilkan Bara Panas)</option>
+                <option value="electrical">Ruang Server / Gardu Listrik Gedung (Tanpa Air Sama Sekali)</option>
+                <option value="highrise">Fasad Gedung Tinggi / Gudang Industri (Kerja Sama Swarm Drone)</option>
+              </select>
+            </div>
+
+            <!-- Engineering Challenge Explanation Box -->
+            <div class="rounded-xl bg-slate-900/95 border border-slate-800 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400">🔬 Mengapa Api Rumah/Gedung Butuh Spesifikasi Khusus?</h4>
+              <ul class="space-y-2 text-xs text-slate-300 leading-relaxed">
+                <li class="flex gap-2">
+                  <span class="text-orange-400 font-bold">1.</span>
+                  <span><strong>Melawan Kecepatan Apung Api (<em>Buoyant Plume</em>):</strong> Api gedung menghasilkan arus konveksi ke atas sebesar <strong>5–12 m/s</strong>. Cincin vortex suara harus ditembakkan dengan kecepatan lebih tinggi dari arus tersebut agar sanggup memutus pasokan oksigen.</span>
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-cyan-400 font-bold">2.</span>
+                  <span><strong>Masalah Bara Kayu &amp; <em>Re-Ignition</em> (Penyalaan Ulang):</strong> Sesuai temuan <em>Physics World</em> &amp; <em>George Mason University</em>, gelombang suara mematikan nyala api (<em>flame knockdown</em>) namun <strong>tidak mendinginkan bara kayu dalam</strong>. Jika suhu kayu masih &gt;400°C, api bisa menyala lagi saat suara berhenti.</span>
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-emerald-400 font-bold">3.</span>
+                  <span><strong>Solusi Rekayasa Hibrida &amp; Swarm Drone:</strong> Untuk kebakaran gedung, meriam vortex akustik digunakan untuk <strong>mematikan kobaran api besar dalam hitungan detik</strong>, lalu dikombinasikan dengan <strong>kabut air mikro (<em>water mist</em>) atau gas N₂</strong> untuk mendinginkan bara dengan penggunaan air <strong>90% lebih hemat</strong> dibanding selang pemadam biasa!</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-4 px-4 sm:px-6 mt-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <div>
+        <strong>Vortex Tech Interactive Physics Lab</strong> — Berdasarkan inovasi Ángela Karime Venegas Hernández (CETis 78 Meksiko / ISIF 2026) &amp; Riset Akustik GMU / DARPA.
+      </div>
+      <div class="mono text-[11px] text-slate-400">
+        Frekuensi Optimal: 30 Hz – 60 Hz | Tanpa Air &amp; Tanpa Bahan Kimia
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Script -->
+  <script>
+    (function() {
+      // --- 1. Tab Navigation ---
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabPanels = {
+        sim: document.getElementById('tab-sim'),
+        cara: document.getElementById('tab-cara'),
+        fisika: document.getElementById('tab-fisika'),
+        diy: document.getElementById('tab-diy'),
+        skala: document.getElementById('tab-skala')
+      };
+
+      tabButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const target = btn.getAttribute('data-tab');
+          tabButtons.forEach(function(b) {
+            b.classList.remove('tab-active');
+            b.classList.add('text-slate-300');
+          });
+          btn.classList.add('tab-active');
+          btn.classList.remove('text-slate-300');
+
+          Object.keys(tabPanels).forEach(function(key) {
+            if (key === target) {
+              tabPanels[key].classList.remove('hidden');
+            } else {
+              tabPanels[key].classList.add('hidden');
+            }
+          });
+
+          if (target === 'sim') {
+            resizeCanvas();
+          } else if (target === 'skala') {
+            resizeScaleCanvas();
+          }
+        });
+      });
+
+      // --- 2. Simulator State & Controls ---
+      const state = {
+        isWaveActive: false,
+        isAudioEnabled: false,
+        freq: 30,          // Hz
+        power: 85,         // Watts
+        aperture: 7.0,     // cm
+        distance: 35,      // cm
+        fuelType: 'alcohol',
+        fireIntegrity: 100, // 0 to 100%
+        localOxygen: 21.0,  // %
+        flameTemp: 680,     // C
+        conePhase: 0,
+        vortexRings: [],
+        oxygenParticles: [],
+        fuelParticles: [],
+        flameParticles: [],
+        smokeParticles: []
+      };
+
+      const fuelConfigs = {
+        candle:  { name: 'Lilin Parafin', baseTemp: 600, difficulty: 0.65, regenRate: 0.18 },
+        alcohol: { name: 'Cairan Alkohol', baseTemp: 680, difficulty: 1.0,  regenRate: 0.25 },
+        grease:  { name: 'Minyak Dapur',  baseTemp: 760, difficulty: 1.35, regenRate: 0.32 },
+        wood:    { name: 'Kayu & Kertas', baseTemp: 820, difficulty: 1.65, regenRate: 0.40 }
+      };
+
+      // DOM Elements for Controls
+      const sliderFreq = document.getElementById('slider-freq');
+      const sliderPower = document.getElementById('slider-power');
+      const sliderAperture = document.getElementById('slider-aperture');
+      const sliderDist = document.getElementById('slider-dist');
+      const selectFuel = document.getElementById('select-fuel');
+
+      const labelFreq = document.getElementById('label-freq');
+      const labelPower = document.getElementById('label-power');
+      const labelAperture = document.getElementById('label-aperture');
+      const labelDist = document.getElementById('label-dist');
+
+      const btnToggleWave = document.getElementById('btn-toggle-wave');
+      const waveBtnIcon = document.getElementById('wave-btn-icon');
+      const waveBtnText = document.getElementById('wave-btn-text');
+      const btnToggleAudio = document.getElementById('btn-toggle-audio');
+      const audioBtnIcon = document.getElementById('audio-btn-icon');
+      const audioBtnText = document.getElementById('audio-btn-text');
+      const btnReignite = document.getElementById('btn-reignite');
+      const btnResetParams = document.getElementById('btn-reset-params');
+
+      // Telemetry DOM
+      const metricFireIntegrity = document.getElementById('metric-fire-integrity');
+      const metricFireBadge = document.getElementById('metric-fire-badge');
+      const barFireIntegrity = document.getElementById('bar-fire-integrity');
+      const metricFreq = document.getElementById('metric-freq');
+      const metricWavelength = document.getElementById('metric-wavelength');
+      const metricFreqZone = document.getElementById('metric-freq-zone');
+      const metricVortexSpeed = document.getElementById('metric-vortex-speed');
+      const metricSpl = document.getElementById('metric-spl');
+      const metricVortexDesc = document.getElementById('metric-vortex-desc');
+      const metricOxygen = document.getElementById('metric-oxygen');
+      const metricTemp = document.getElementById('metric-temp');
+      const simStatusMessage = document.getElementById('sim-status-message');
+      const physicsLiveExplanation = document.getElementById('physics-live-explanation');
+
+      // --- 3. Web Audio API Synthesizer (30-400 Hz Bass Tone) ---
+      let audioCtx = null;
+      let oscillator = null;
+      let gainNode = null;
+
+      function initAudio() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+            oscillator = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(state.freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+          }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function updateAudioTone() {
+        if (!audioCtx || !oscillator || !gainNode) return;
+        const now = audioCtx.currentTime;
+        oscillator.frequency.setTargetAtTime(state.freq, now, 0.03);
+        if (state.isWaveActive && state.isAudioEnabled) {
+          const vol = Math.min(0.35, (state.power / 150) * 0.32);
+          gainNode.gain.setTargetAtTime(vol, now, 0.05);
+        } else {
+          gainNode.gain.setTargetAtTime(0.0001, now, 0.05);
+        }
+      }
+
+      // --- 4. Physics Effectiveness Model ---
+      function calculatePhysicsMetrics() {
+        const f = state.freq;
+        const p = state.power;
+        const ap = state.aperture;
+        const dist = state.distance;
+
+        // Frequency efficiency curve: peak at 30-55 Hz
+        let freqEff = 0;
+        if (f >= 25 && f <= 65) {
+          freqEff = 1.0 - Math.abs(f - 38) * 0.008;
+        } else if (f < 25) {
+          freqEff = Math.max(0.15, 0.4 + (f - 10) * 0.035);
+        } else {
+          // Rapid drop above 65 Hz due to 1/f^2 cone excursion drop
+          freqEff = Math.max(0.04, Math.exp(-(f - 65) / 55));
+        }
+
+        // Collimator aperture efficiency: optimal around 6.5 - 8.5 cm
+        let apEff = 1.0 - Math.pow((ap - 7.5) / 8.5, 2);
+        apEff = Math.max(0.2, Math.min(1.0, apEff));
+
+        // Distance attenuation: vortex rings travel well up to ~60cm, then decay
+        const distEff = Math.max(0.15, 1.0 - Math.pow(Math.max(0, dist - 20) / 115, 1.35));
+
+        // Power factor
+        const powerFactor = Math.pow(p / 85, 0.85);
+
+        // Resulting acoustic wind / vortex speed at flame (m/s)
+        const vortexSpeed = state.isWaveActive
+          ? (4.2 * freqEff * apEff * distEff * powerFactor)
+          : 0;
+
+        // Sound Pressure Level (dB)
+        const spl = state.isWaveActive
+          ? Math.round(92 + 12 * Math.log10(p / 15) - 6 * Math.log10(dist / 20))
+          : 0;
+
+        const wavelength = (343 / f).toFixed(1);
+
+        return {
+          freqEff: freqEff,
+          apEff: apEff,
+          distEff: distEff,
+          vortexSpeed: vortexSpeed,
+          spl: spl,
+          wavelength: wavelength
+        };
+      }
+
+      function updateControlLabels() {
+        state.freq = parseFloat(sliderFreq.value);
+        state.power = parseFloat(sliderPower.value);
+        state.aperture = parseFloat(sliderAperture.value);
+        state.distance = parseFloat(sliderDist.value);
+        state.fuelType = selectFuel.value;
+
+        labelFreq.textContent = state.freq + ' Hz';
+        labelPower.textContent = state.power + ' W';
+        labelAperture.textContent = state.aperture.toFixed(1) + ' cm';
+        labelDist.textContent = state.distance + ' cm';
+
+        const metrics = calculatePhysicsMetrics();
+        metricFreq.textContent = state.freq + ' Hz';
+        metricWavelength.textContent = 'λ = ' + metrics.wavelength + ' m';
+
+        if (state.freq >= 30 && state.freq <= 60) {
+          metricFreqZone.textContent = '✓ Zona Optimal (30–60 Hz)';
+          metricFreqZone.className = 'text-[10px] text-emerald-400 font-medium block mt-1';
+        } else if (state.freq >= 20 && state.freq <= 85) {
+          metricFreqZone.textContent = '⚠ Zona Transisi (Kurang Optimal)';
+          metricFreqZone.className = 'text-[10px] text-amber-400 font-medium block mt-1';
+        } else {
+          metricFreqZone.textContent = '✕ Di Luar Zona Efektif Pemadaman';
+          metricFreqZone.className = 'text-[10px] text-red-400 font-medium block mt-1';
+        }
+
+        // Live diagnostic text
+        if (state.freq >= 30 && state.freq <= 60) {
+          physicsLiveExplanation.innerHTML =
+            'Pada frekuensi <strong>' + state.freq + ' Hz</strong>, membran subwoofer bergerak dengan simpangan besar sebanyak ' + state.freq + ' kali/detik. Melalui lubang kolimator <strong>' + state.aperture.toFixed(1) + ' cm</strong>, terbentuk <strong>cincin vortex</strong> kuat yang mendorong oksigen menjauh dari bahan bakar.';
+        } else if (state.freq > 85) {
+          physicsLiveExplanation.innerHTML =
+            'Pada frekuensi tinggi (<strong>' + state.freq + ' Hz</strong>), simpangan gerak membran speaker sangat kecil (ξ ∝ 1/f²). Gelombang suara tidak mampu membentuk cincin vortex berenergi tinggi, sehingga api hanya bergoyang tanpa padam.';
+        } else {
+          physicsLiveExplanation.innerHTML =
+            'Pada frekuensi <strong>' + state.freq + ' Hz</strong>, jeda antar pulsa terlalu renggang (' + (1000 / state.freq).toFixed(0) + ' ms). Api sempat menyala kembali di antara jeda ketukan gelombang.';
+        }
+
+        updateAudioTone();
+      }
+
+      [sliderFreq, sliderPower, sliderAperture, sliderDist, selectFuel].forEach(function(el) {
+        el.addEventListener('input', updateControlLabels);
+        el.addEventListener('change', updateControlLabels);
+      });
+
+      // Preset buttons
+      document.querySelectorAll('.preset-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          sliderFreq.value = btn.getAttribute('data-freq');
+          sliderPower.value = btn.getAttribute('data-power');
+          sliderAperture.value = btn.getAttribute('data-aperture');
+          sliderDist.value = btn.getAttribute('data-dist');
+          if (state.fireIntegrity <= 0) {
+            reigniteFire();
+          }
+          if (!state.isWaveActive) {
+            toggleWave(true);
+          }
+          updateControlLabels();
+        });
+      });
+
+      function toggleWave(forceState) {
+        state.isWaveActive = typeof forceState === 'boolean' ? forceState : !state.isWaveActive;
+        if (state.isWaveActive) {
+          waveBtnIcon.textContent = '⏹️';
+          waveBtnText.textContent = 'Hentikan Gelombang';
+          btnToggleWave.className = 'flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2';
+        } else {
+          waveBtnIcon.textContent = '🔊';
+          waveBtnText.textContent = 'Tembakkan Gelombang';
+          btnToggleWave.className = 'flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2';
+        }
+        updateAudioTone();
+      }
+
+      btnToggleWave.addEventListener('click', function() {
+        if (state.isAudioEnabled) initAudio();
+        toggleWave();
+      });
+
+      btnToggleAudio.addEventListener('click', function() {
+        state.isAudioEnabled = !state.isAudioEnabled;
+        if (state.isAudioEnabled) {
+          initAudio();
+          audioBtnIcon.textContent = '🔊';
+          audioBtnText.textContent = 'Suara Bass: ON';
+          btnToggleAudio.className = 'px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 transition-all flex items-center gap-1.5';
+        } else {
+          audioBtnIcon.textContent = '🔇';
+          audioBtnText.textContent = 'Suara Bass: OFF';
+          btnToggleAudio.className = 'px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5';
+        }
+        updateAudioTone();
+      });
+
+      function reigniteFire() {
+        state.fireIntegrity = 100;
+        state.localOxygen = 21.0;
+        state.flameTemp = fuelConfigs[state.fuelType].baseTemp;
+        simStatusMessage.textContent = '🔥 Api dinyalakan kembali. Siap untuk pengujian gelombang suara.';
+        simStatusMessage.className = 'font-medium text-amber-300';
+      }
+
+      btnReignite.addEventListener('click', reigniteFire);
+
+      btnResetParams.addEventListener('click', function() {
+        sliderFreq.value = 30;
+        sliderPower.value = 85;
+        sliderAperture.value = 7;
+        sliderDist.value = 35;
+        selectFuel.value = 'alcohol';
+        reigniteFire();
+        updateControlLabels();
+      });
+
+      // --- 5. Interactive Canvas Simulation Engine ---
+      const canvas = document.getElementById('sim-canvas');
+      const ctx = canvas.getContext('2d');
+      let cw = 800;
+      let ch = 380;
+
+      function resizeCanvas() {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+        const rect = container.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          canvas.width = rect.width * window.devicePixelRatio;
+          canvas.height = rect.height * window.devicePixelRatio;
+          ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+          cw = rect.width;
+          ch = rect.height;
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+
+      // Initialize particles
+      function initParticles() {
+        state.oxygenParticles = [];
+        for (let i = 0; i < 42; i++) {
+          state.oxygenParticles.push({
+            x: Math.random() * cw,
+            y: Math.random() * ch,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8
+          });
+        }
+      }
+
+      let lastVortexSpawn = 0;
+
+      function updateSimulation(timestamp) {
+        const metrics = calculatePhysicsMetrics();
+        const fuel = fuelConfigs[state.fuelType];
+
+        // Geometry coordinates
+        const nozzleX = Math.max(150, cw * 0.26);
+        const nozzleY = ch * 0.54;
+        const distPx = (state.distance / 120) * (cw * 0.46) + 70;
+        const fireX = Math.min(cw - 75, nozzleX + distPx);
+        const fireBaseY = ch * 0.68;
+
+        // Speaker cone oscillation
+        if (state.isWaveActive) {
+          // Visual speed scaled so user can see low vs high frequency behavior clearly
+          const visualOmega = Math.min(0.85, 0.08 + (state.freq / 120) * 0.35);
+          state.conePhase += visualOmega;
+
+          // Spawn vortex rings based on frequency
+          const spawnInterval = Math.max(45, Math.min(360, 4200 / state.freq));
+          if (timestamp - lastVortexSpawn > spawnInterval) {
+            lastVortexSpawn = timestamp;
+            const ringRadius = Math.max(8, (state.aperture / 18) * 38);
+            const ringStrength = metrics.freqEff * metrics.apEff * (state.power / 85);
+            state.vortexRings.push({
+              x: nozzleX + 4,
+              y: nozzleY,
+              radius: ringRadius,
+              speed: 3.5 + metrics.vortexSpeed * 1.15,
+              strength: ringStrength,
+              alpha: 0.9,
+              isVortex: state.freq <= 85 && state.aperture <= 13
+            });
+          }
+        }
+
+        // Update Vortex Rings
+        let activeHitStrength = 0;
+        for (let i = state.vortexRings.length - 1; i >= 0; i--) {
+          const r = state.vortexRings[i];
+          r.x += r.speed;
+          // Slight expansion depending on collimation
+          r.radius += (state.aperture / 18) * 0.35 + (state.freq > 90 ? 0.55 : 0.08);
+          r.alpha -= 0.008 + (state.freq > 90 ? 0.012 : 0.002);
+
+          // Check interaction with flame zone
+          if (Math.abs(r.x - fireX) < 38) {
+            activeHitStrength = Math.max(activeHitStrength, r.strength * metrics.distEff);
+          }
+
+          if (r.x > cw + 40 || r.alpha <= 0.02) {
+            state.vortexRings.splice(i, 1);
+          }
+        }
+
+        // Update Fire Integrity & Oxygen Displacement
+        if (state.fireIntegrity > 0) {
+          if (state.isWaveActive && activeHitStrength > 0.05) {
+            const suppressionPower = (metrics.vortexSpeed / fuel.difficulty);
+            if (suppressionPower > 1.35) {
+              // Strong enough to push oxygen below combustion threshold
+              state.fireIntegrity = Math.max(0, state.fireIntegrity - (suppressionPower - 1.1) * 0.95);
+              state.localOxygen = Math.max(11.5, 21.0 - suppressionPower * 3.4);
+              simStatusMessage.textContent = '⚡ Cincin vortex 30 Hz menyapu oksigen & menipiskan lapisan batas panas api!';
+              simStatusMessage.className = 'font-medium text-cyan-300';
+            } else {
+              // Flame flickers/stretches but recovers
+              state.fireIntegrity = Math.max(38, Math.min(100, state.fireIntegrity - 0.15 + fuel.regenRate * 0.5));
+              state.localOxygen = Math.max(16.2, 21.0 - suppressionPower * 1.8);
+              simStatusMessage.textContent = '⚠️ Api bergoyang, namun energi vortex belum cukup kuat untuk memutus segitiga api.';
+              simStatusMessage.className = 'font-medium text-amber-300';
+            }
+          } else {
+            // Fire recovers naturally if not extinguished
+            state.fireIntegrity = Math.min(100, state.fireIntegrity + fuel.regenRate);
+            state.localOxygen = Math.min(21.0, state.localOxygen + 0.15);
+          }
+          state.flameTemp = Math.round(fuel.baseTemp * (0.45 + 0.55 * (state.fireIntegrity / 100)));
+        } else {
+          // Extinguished!
+          state.flameTemp = Math.max(28, Math.round(state.flameTemp * 0.96));
+          state.localOxygen = Math.min(21.0, state.localOxygen + 0.12);
+          simStatusMessage.textContent = '✅ API PADAM! Oksigen terpisah dari bahan bakar tanpa air & tanpa residu kimia.';
+          simStatusMessage.className = 'font-bold text-emerald-400';
+        }
+
+        // Update Telemetry UI
+        const integrityInt = Math.round(state.fireIntegrity);
+        metricFireIntegrity.textContent = integrityInt + '%';
+        barFireIntegrity.style.width = integrityInt + '%';
+
+        if (integrityInt === 0) {
+          metricFireBadge.textContent = 'PADAM TOTAL';
+          metricFireBadge.className = 'text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold';
+          metricFireIntegrity.className = 'text-lg font-extrabold mono text-emerald-400';
+        } else if (integrityInt < 60) {
+          metricFireBadge.textContent = 'TERTEKAN';
+          metricFireBadge.className = 'text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold';
+          metricFireIntegrity.className = 'text-lg font-extrabold mono text-amber-400';
+        } else {
+          metricFireBadge.textContent = 'MENYALA';
+          metricFireBadge.className = 'text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 font-semibold';
+          metricFireIntegrity.className = 'text-lg font-extrabold mono text-orange-400';
+        }
+
+        metricVortexSpeed.textContent = metrics.vortexSpeed.toFixed(1) + ' m/s';
+        metricSpl.textContent = metrics.spl + ' dB';
+        metricVortexDesc.textContent = state.isWaveActive
+          ? (metrics.vortexSpeed > 1.8 ? 'Vortex Ring Terfokus Kuat' : 'Gelombang Menyebar / Lemah')
+          : 'Alat belum ditembakkan';
+        metricOxygen.textContent = state.localOxygen.toFixed(1) + '%';
+        metricTemp.textContent = state.flameTemp + ' °C';
+
+        // Spawn Flame & Fuel Particles when burning
+        if (state.fireIntegrity > 0) {
+          const count = Math.ceil((state.fireIntegrity / 100) * 4);
+          for (let i = 0; i < count; i++) {
+            const windPush = state.isWaveActive ? metrics.vortexSpeed * 1.45 : 0;
+            state.flameParticles.push({
+              x: fireX + (Math.random() - 0.5) * 26,
+              y: fireBaseY - 6,
+              vx: (Math.random() - 0.5) * 1.1 + windPush + (state.isWaveActive ? Math.sin(state.conePhase) * 1.8 : 0),
+              vy: -(1.6 + Math.random() * 2.4),
+              radius: 8 + Math.random() * 12 * (state.fireIntegrity / 100),
+              life: 1.0,
+              decay: 0.028 + Math.random() * 0.02
+            });
+          }
+          // Fuel vapor molecules rising from burner
+          if (Math.random() < 0.45) {
+            state.fuelParticles.push({
+              x: fireX + (Math.random() - 0.5) * 22,
+              y: fireBaseY - 4,
+              vx: (state.isWaveActive ? metrics.vortexSpeed * 1.8 : 0) + (Math.random() - 0.5) * 0.6,
+              vy: -1.1 - Math.random() * 0.8,
+              alpha: 0.9
+            });
+          }
+        } else if (state.flameTemp > 60 && Math.random() < 0.3) {
+          // Post-extinguish smoke wisp
+          state.smokeParticles.push({
+            x: fireX + (Math.random() - 0.5) * 16,
+            y: fireBaseY - 8,
+            vx: (state.isWaveActive ? metrics.vortexSpeed * 1.2 : 0.3) + (Math.random() - 0.5) * 0.5,
+            vy: -1.2 - Math.random() * 0.8,
+            radius: 6 + Math.random() * 6,
+            alpha: 0.45
+          });
+        }
+
+        // Update Oxygen Particles
+        state.oxygenParticles.forEach(function(p) {
+          // If inside acoustic beam path, push rightwards
+          if (state.isWaveActive && p.x > nozzleX && Math.abs(p.y - nozzleY) < 55) {
+            p.vx += metrics.vortexSpeed * 0.22 + Math.sin(state.conePhase) * 0.35;
+          } else {
+            // Gentle attraction toward flame when burning
+            if (state.fireIntegrity > 0) {
+              const dx = fireX - p.x;
+              const dy = (fireBaseY - 25) - p.y;
+              const d = Math.hypot(dx, dy);
+              if (d < 130 && d > 10) {
+                p.vx += (dx / d) * 0.04;
+                p.vy += (dy / d) * 0.04;
+              }
+            }
+          }
+          p.vx *= 0.92;
+          p.vy *= 0.92;
+          p.x += p.vx + (Math.random() - 0.5) * 0.4;
+          p.y += p.vy + (Math.random() - 0.5) * 0.4;
+
+          if (p.x > cw) p.x = nozzleX + 10;
+          if (p.x < 0) p.x = cw - 10;
+          if (p.y < 10) p.y = ch - 20;
+          if (p.y > ch - 10) p.y = 20;
+        });
+
+        // Update Fuel Vapor Particles
+        for (let i = state.fuelParticles.length - 1; i >= 0; i--) {
+          const fp = state.fuelParticles[i];
+          fp.x += fp.vx;
+          fp.y += fp.vy;
+          fp.alpha -= 0.022;
+          if (fp.alpha <= 0) state.fuelParticles.splice(i, 1);
+        }
+
+        // Update Flame Particles
+        for (let i = state.flameParticles.length - 1; i >= 0; i--) {
+          const fl = state.flameParticles[i];
+          fl.x += fl.vx;
+          fl.y += fl.vy;
+          fl.life -= fl.decay;
+          if (fl.life <= 0) state.flameParticles.splice(i, 1);
+        }
+
+        // Update Smoke Particles
+        for (let i = state.smokeParticles.length - 1; i >= 0; i--) {
+          const sm = state.smokeParticles[i];
+          sm.x += sm.vx;
+          sm.y += sm.vy;
+          sm.radius += 0.25;
+          sm.alpha -= 0.01;
+          if (sm.alpha <= 0) state.smokeParticles.splice(i, 1);
+        }
+
+        drawScene(nozzleX, nozzleY, fireX, fireBaseY, metrics);
+        requestAnimationFrame(updateSimulation);
+      }
+
+      function drawScene(nozzleX, nozzleY, fireX, fireBaseY, metrics) {
+        ctx.clearRect(0, 0, cw, ch);
+
+        // Background subtle grid
+        ctx.strokeStyle = 'rgba(30, 41, 59, 0.55)';
+        ctx.lineWidth = 1;
+        const gridStep = 32;
+        for (let x = 0; x < cw; x += gridStep) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, ch);
+          ctx.stroke();
+        }
+        for (let y = 0; y < ch; y += gridStep) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(cw, y);
+          ctx.stroke();
+        }
+
+        // Floor / Lab Bench line
+        const floorY = fireBaseY + 26;
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, floorY);
+        ctx.lineTo(cw, floorY);
+        ctx.stroke();
+
+        // Distance ruler marker between nozzle and fire
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(nozzleX, floorY + 16);
+        ctx.lineTo(fireX, floorY + 16);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Jarak Tembak: ' + state.distance + ' cm', (nozzleX + fireX) / 2, floorY + 30);
+
+        // --- Draw Vortex Tech Cylinder & Subwoofer ---
+        const tubeLen = Math.min(145, nozzleX - 20);
+        const tubeLeft = nozzleX - tubeLen;
+        const tubeRadius = 38;
+
+        // Control pack / 12V Battery + Amp box under/behind cylinder
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(tubeLeft + 6, nozzleY + tubeRadius + 6, tubeLen * 0.72, 26, 6);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#f97316';
+        ctx.font = 'bold 9px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('12V BAT + 30Hz AMP', tubeLeft + 12, nozzleY + tubeRadius + 22);
+
+        // Cylinder Body (Red & Black like Ángela's Vortex Tech)
+        const cylGrad = ctx.createLinearGradient(tubeLeft, nozzleY - tubeRadius, tubeLeft, nozzleY + tubeRadius);
+        cylGrad.addColorStop(0, '#991b1b');
+        cylGrad.addColorStop(0.5, '#dc2626');
+        cylGrad.addColorStop(1, '#450a0a');
+        ctx.fillStyle = cylGrad;
+        ctx.strokeStyle = '#f87171';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(tubeLeft, nozzleY - tubeRadius, tubeLen, tubeRadius * 2, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        // Internal cutaway view showing vibrating Subwoofer Cone
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
+        ctx.fillRect(tubeLeft + 10, nozzleY - tubeRadius + 5, tubeLen - 22, tubeRadius * 2 - 10);
+
+        // Speaker Magnet & Frame
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(tubeLeft + 14, nozzleY - 14, 14, 28);
+
+        // Vibrating Cone Excursion (amplitude inversely proportional to frequency)
+        const maxExcursion = state.isWaveActive
+          ? Math.max(1.5, Math.min(12, (45 / state.freq) * (state.power / 85) * 6))
+          : 0;
+        const coneOffset = state.isWaveActive ? Math.sin(state.conePhase) * maxExcursion : 0;
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(tubeLeft + 28, nozzleY - 12);
+        ctx.lineTo(tubeLeft + 46 + coneOffset, nozzleY - 30);
+        ctx.lineTo(tubeLeft + 46 + coneOffset, nozzleY + 30);
+        ctx.lineTo(tubeLeft + 28, nozzleY + 12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Label on cylinder
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('VORTEX TECH', tubeLeft + tubeLen * 0.62, nozzleY - 4);
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '600 9px JetBrains Mono, monospace';
+        ctx.fillText(state.freq + ' Hz | ' + state.power + 'W', tubeLeft + tubeLen * 0.62, nozzleY + 10);
+
+        // Collimator Front Cap & Aperture Hole
+        const aperturePx = Math.max(8, (state.aperture / 18) * (tubeRadius * 1.8));
+        ctx.fillStyle = '#0f172a';
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2;
+        // Top baffle lip
+        ctx.fillRect(nozzleX - 6, nozzleY - tubeRadius, 8, tubeRadius - aperturePx / 2);
+        // Bottom baffle lip
+        ctx.fillRect(nozzleX - 6, nozzleY + aperturePx / 2, 8, tubeRadius - aperturePx / 2);
+
+        // Glowing Aperture Indicator
+        ctx.strokeStyle = '#22d3ee';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(nozzleX + 2, nozzleY - aperturePx / 2);
+        ctx.lineTo(nozzleX + 2, nozzleY + aperturePx / 2);
+        ctx.stroke();
+
+        // --- Draw Vortex Rings / Sound Waves ---
+        state.vortexRings.forEach(function(r) {
+          ctx.save();
+          if (r.isVortex) {
+            // Draw Toroidal Vortex Ring (top & bottom swirling cores + elliptical ring)
+            ctx.strokeStyle = 'rgba(34, 211, 238, ' + r.alpha + ')';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.ellipse(r.x, r.y, 7, r.radius, 0, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Top and bottom vortex cores
+            ctx.fillStyle = 'rgba(56, 189, 248, ' + Math.min(1, r.alpha * 1.2) + ')';
+            ctx.beginPath();
+            ctx.arc(r.x, r.y - r.radius, 3.5, 0, Math.PI * 2);
+            ctx.arc(r.x, r.y + r.radius, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            // High-frequency or uncollimated spherical wave arc
+            ctx.strokeStyle = 'rgba(148, 163, 184, ' + (r.alpha * 0.6) + ')';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(r.x - 15, r.y, r.radius * 1.3, -0.65, 0.65);
+            ctx.stroke();
+          }
+          ctx.restore();
+        });
+
+        // --- Draw Oxygen Molecules (Blue Dots) ---
+        ctx.fillStyle = '#3b82f6';
+        state.oxygenParticles.forEach(function(p) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2.6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // --- Draw Fuel Vapor Molecules (Amber Dots) ---
+        state.fuelParticles.forEach(function(fp) {
+          ctx.fillStyle = 'rgba(251, 191, 36, ' + fp.alpha + ')';
+          ctx.beginPath();
+          ctx.arc(fp.x, fp.y, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // --- Draw Burner / Fuel Tray ---
+        ctx.fillStyle = '#334155';
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(fireX - 28, fireBaseY, 56, 26, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 9px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(fuelConfigs[state.fuelType].name.toUpperCase(), fireX, fireBaseY + 16);
+
+        // --- Draw Flame Particles ---
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        state.flameParticles.forEach(function(fl) {
+          const grad = ctx.createRadialGradient(fl.x, fl.y, 1, fl.x, fl.y, fl.radius);
+          grad.addColorStop(0, 'rgba(255, 255, 220, ' + fl.life + ')');
+          grad.addColorStop(0.4, 'rgba(249, 115, 22, ' + (fl.life * 0.85) + ')');
+          grad.addColorStop(1, 'rgba(220, 38, 38, 0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(fl.x, fl.y, fl.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.restore();
+
+        // --- Draw Smoke Particles ---
+        state.smokeParticles.forEach(function(sm) {
+          ctx.fillStyle = 'rgba(148, 163, 184, ' + sm.alpha + ')';
+          ctx.beginPath();
+          ctx.arc(sm.x, sm.y, sm.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // --- 6. Tab 3 Physics Calculator ---
+      const calcFreq = document.getElementById('calc-freq');
+      const calcTempAir = document.getElementById('calc-temp-air');
+      const outSoundSpeed = document.getElementById('out-sound-speed');
+      const outWavelength = document.getElementById('out-wavelength');
+      const outPeriod = document.getElementById('out-period');
+      const outExcursion = document.getElementById('out-excursion');
+
+      function updateTheoryCalc() {
+        const f = Math.max(1, parseFloat(calcFreq.value) || 30);
+        const t = parseFloat(calcTempAir.value) || 28;
+        const v = 331.3 + 0.606 * t;
+        const lam = v / f;
+        const per = 1000 / f;
+        const relEx = Math.min(100, Math.round(Math.pow(30 / f, 2) * 100));
+
+        outSoundSpeed.textContent = v.toFixed(1) + ' m/s';
+        outWavelength.textContent = lam.toFixed(2) + ' m';
+        outPeriod.textContent = per.toFixed(2) + ' ms';
+        outExcursion.textContent = relEx + '% dibanding 30 Hz';
+      }
+
+      calcFreq.addEventListener('input', updateTheoryCalc);
+      calcTempAir.addEventListener('input', updateTheoryCalc);
+
+      // --- 7. Tab 4 DIY Interactive Wiring & Collimator Calculator ---
+      const diyPartsData = {
+        battery: {
+          title: '1. Sumber Daya: Baterai 12V–24V DC',
+          spec: '12V 7Ah SLA / 3S–6S Li-Ion',
+          desc: 'Dalam wawancara bersama N+, Ángela Venegas menjelaskan bahwa prototipe Vortex Tech menggunakan baterai 12 Volt agar alat dapat dibawa secara portabel. Untuk daya dorong ekstra pada amplifier Class-D seperti TPA3116D2, Anda bisa menggunakan baterai Lithium-Ion 3S (12.6V) hingga 5S/6S (18V–24V) dengan kapasitas arus minimal 5 Ampere.',
+          wiring: '📌 Koneksi: Kutub (+) Baterai → Fuse 10A → Sakelar Utama → Terminal VCC (+12V/24V) Amplifier.'
+        },
+        generator: {
+          title: '2. Pembangkit Frekuensi (Signal Generator 30 Hz)',
+          spec: 'Sine Wave 30 Hz – 60 Hz',
+          desc: 'Berfungsi menghasilkan sinyal gelombang sinus murni (Sine Wave) pada frekuensi 30 Hz (30 getaran per detik). Anda bisa memakai modul Function Generator XR2206, Arduino dengan DAC/RC low-pass filter, atau paling praktis menggunakan aplikasi "Frequency Sound Generator" di smartphone yang dihubungkan via kabel audio AUX 3.5mm.',
+          wiring: '📌 Koneksi: Output Audio Generator (30 Hz Sine) → Input Audio (AUX / RCA) pada Modul Amplifier.'
+        },
+        amp: {
+          title: '3. Penguat Daya: Amplifier Mono Subwoofer',
+          spec: 'TPA3116D2 100W Class-D Mono',
+          desc: 'Sinyal dari pembangkit frekuensi masih sangat lemah (miliwatt) sehingga wajib diperkuat oleh Amplifier Subwoofer Kelas-D berefisiensi tinggi (50W hingga 100W). Pilih papan amplifier khusus subwoofer (PBTL Mono) yang mampu melewatkan frekuensi sangat rendah 20 Hz – 60 Hz tanpa terpotong filter high-pass.',
+          wiring: '📌 Koneksi: Output Speaker (+ dan -) Amplifier → Kabel Tebal (AWG 16) → Terminal (+ dan -) Subwoofer.'
+        },
+        speaker: {
+          title: '4. Transduser Suara: Subwoofer High-Excursion',
+          spec: '6.5" – 8" Woofer (4Ω, 50W–100W)',
+          desc: 'Pilih driver subwoofer dengan karet tepi (surround) yang tebal dan lentur (long-throw / high-excursion). Saat diberi sinyal 30 Hz, daun speaker akan memompa maju-mundur dengan kuat seperti piston udara.',
+          wiring: '📌 Pemasangan: Dipasang menghadap ke dalam tabung silinder dengan sambungan rapat kedap udara (sealed).'
+        },
+        collimator: {
+          title: '5. Tabung Kolimator & Bukaan Vortex (Nozzle)',
+          spec: 'Pipa PVC / Tabung Silinder + Lubang Orifice',
+          desc: 'Bagian paling krusial! Tabung silinder mengarahkan gelombang tekanan ke depan, sedangkan tutup depan dengan lubang lingkaran yang dipersempit (~45% diameter tabung) memaksa udara menggulung menjadi cincin pusaran (vortex ring) yang stabil dan fokus menghantam pangkal api.',
+          wiring: '📌 Dimensi Ideal: Panjang tabung ≈ 2× diameter tabung; Diameter lubang depan ≈ 0.45× diameter tabung.'
+        }
+      };
+
+      const diyPartBtns = document.querySelectorAll('.diy-part-btn');
+      const diyDetailTitle = document.getElementById('diy-detail-title');
+      const diyDetailSpec = document.getElementById('diy-detail-spec');
+      const diyDetailDesc = document.getElementById('diy-detail-desc');
+      const diyDetailWiring = document.getElementById('diy-detail-wiring');
+
+      diyPartBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const part = btn.getAttribute('data-part');
+          const info = diyPartsData[part];
+          if (!info) return;
+
+          diyPartBtns.forEach(function(b) {
+            b.className = 'diy-part-btn text-left p-4 rounded-2xl border border-slate-800 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1';
+          });
+          btn.className = 'diy-part-btn text-left p-4 rounded-2xl border border-orange-500 bg-orange-500/10 transition-all space-y-1';
+
+          diyDetailTitle.textContent = info.title;
+          diyDetailSpec.textContent = info.spec;
+          diyDetailDesc.textContent = info.desc;
+          diyDetailWiring.textContent = info.wiring;
+        });
+      });
+
+      const diySpeakerInch = document.getElementById('diy-speaker-inch');
+      const diyOutTubeD = document.getElementById('diy-out-tube-d');
+      const diyOutTubeL = document.getElementById('diy-out-tube-l');
+      const diyOutOrifice = document.getElementById('diy-out-orifice');
+      const diyOutAmp = document.getElementById('diy-out-amp');
+
+      function updateDiyCalc() {
+        const inch = parseFloat(diySpeakerInch.value) || 6.5;
+        const tubeCm = Math.round(inch * 2.54 + 0.5);
+        const lenMin = Math.round(tubeCm * 2.0);
+        const lenMax = Math.round(tubeCm * 2.5);
+        const orificeCm = (tubeCm * 0.45).toFixed(1);
+        let ampRec = '50W – 100W Mono';
+        if (inch <= 5) ampRec = '30W – 50W Mono';
+        if (inch === 8) ampRec = '80W – 120W Mono';
+        if (inch >= 10) ampRec = '120W – 200W Mono';
+
+        diyOutTubeD.textContent = tubeCm + '.0 cm (Pipa ~' + Math.round(inch) + '")';
+        diyOutTubeL.textContent = lenMin + ' – ' + lenMax + ' cm';
+        diyOutOrifice.textContent = orificeCm + ' cm (Rasio d/D = 0.45)';
+        diyOutAmp.textContent = ampRec;
+      }
+
+      diySpeakerInch.addEventListener('change', updateDiyCalc);
+
+      // --- 8. Tab 5: Full-Scale Building/House Fire Simulator & Spec Calculator ---
+      const scaleState = {
+        area: 16,            // m^2
+        distance: 6,         // meters
+        buildingType: 'structural',
+        isCannonActive: false,
+        isHybridMist: true,
+        fireIntensity: 100,  // 0 to 100%
+        emberHeat: 100,      // 0 to 100% (causes reignition if high when sound stops)
+        plumeVelocity: 4.8,
+        requiredVortexSpeed: 7.2,
+        vortexRings: [],
+        flames: [],
+        mistParticles: [],
+        phase: 0
+      };
+
+      const sliderScaleArea = document.getElementById('slider-scale-area');
+      const sliderScaleDist = document.getElementById('slider-scale-dist');
+      const selectScaleType = document.getElementById('select-scale-type');
+      const labelScaleArea = document.getElementById('label-scale-area');
+      const labelScaleDist = document.getElementById('label-scale-dist');
+
+      const btnScaleFireToggle = document.getElementById('btn-scale-fire-toggle');
+      const scaleWaveIcon = document.getElementById('scale-wave-icon');
+      const scaleWaveText = document.getElementById('scale-wave-text');
+      const btnScaleHybrid = document.getElementById('btn-scale-hybrid');
+      const btnScaleReignite = document.getElementById('btn-scale-reignite');
+
+      const scaleSceneTitle = document.getElementById('scale-scene-title');
+      const scaleSceneSubtitle = document.getElementById('scale-scene-subtitle');
+      const scaleFireStatusBadge = document.getElementById('scale-fire-status-badge');
+      const scaleLiveStatus = document.getElementById('scale-live-status');
+
+      const specPlatformBadge = document.getElementById('spec-platform-badge');
+      const specAmpPower = document.getElementById('spec-amp-power');
+      const specAmpDetail = document.getElementById('spec-amp-detail');
+      const specSubArray = document.getElementById('spec-sub-array');
+      const specSubDetail = document.getElementById('spec-sub-detail');
+      const specOptFreq = document.getElementById('spec-opt-freq');
+      const specCollimatorDim = document.getElementById('spec-collimator-dim');
+      const specOrificeDim = document.getElementById('spec-orifice-dim');
+      const specSplLevel = document.getElementById('spec-spl-level');
+      const specSafetyNote = document.getElementById('spec-safety-note');
+      const specPowerSupply = document.getElementById('spec-power-supply');
+      const specWeightEst = document.getElementById('spec-weight-est');
+
+      const scaleCanvas = document.getElementById('scale-canvas');
+      const scaleCtx = scaleCanvas.getContext('2d');
+      let scw = 700;
+      let sch = 300;
+
+      function resizeScaleCanvas() {
+        const container = document.getElementById('scale-canvas-container');
+        if (!container) return;
+        const rect = container.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          scaleCanvas.width = rect.width * window.devicePixelRatio;
+          scaleCanvas.height = rect.height * window.devicePixelRatio;
+          scaleCtx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+          scw = rect.width;
+          sch = rect.height;
+        }
+      }
+
+      window.addEventListener('resize', resizeScaleCanvas);
+
+      function calculateFullScaleSpecs() {
+        const area = scaleState.area;
+        const dist = scaleState.distance;
+        const bType = scaleState.buildingType;
+
+        // Heat release rate (HRR) approx 115 kW per m^2 of residential/commercial fire
+        const hrrKw = Math.round(area * 115);
+        const hrrMw = (hrrKw / 1000).toFixed(1);
+
+        // Buoyant plume upward velocity: v_plume ~ 1.9 * Q_MW^(1/3) + 2.2
+        const plumeVel = +(2.1 + 2.15 * Math.pow(hrrKw / 1000, 0.33)).toFixed(1);
+        const reqVortexVel = +(plumeVel * 1.5).toFixed(1);
+
+        scaleState.plumeVelocity = plumeVel;
+        scaleState.requiredVortexSpeed = reqVortexVel;
+
+        // Required acoustic power scales with area and distance^1.4
+        const rawPowerW = Math.round(140 * Math.pow(area, 0.92) * Math.pow(dist / 3, 1.15));
+        const powerW = Math.max(250, Math.min(120000, rawPowerW));
+
+        // Collimator diameter (cm)
+        const collDiaCm = Math.min(240, Math.max(28, Math.round(24 * Math.pow(area, 0.38))));
+        const collLenCm = Math.round(collDiaCm * 2.1);
+        const orificeCm = Math.round(collDiaCm * 0.45);
+
+        // SPL at 1m
+        const splDb = Math.min(162, Math.round(118 + 10 * Math.log10(powerW / 50)));
+
+        // Determine platform tier, transducer array, frequency & battery
+        let platform = '';
+        let subConfig = '';
+        let subDetail = '';
+        let optFreq = '';
+        let supply = '';
+        let weight = '';
+        let ampDetail = '';
+
+        if (area <= 4) {
+          platform = 'Ransel Taktis Portabel (Heavy-Duty)';
+          subConfig = '1× Subwoofer 12"';
+          subDetail = 'High-Excursion Neodymium (Xmax 18 mm)';
+          optFreq = '30 Hz – 45 Hz';
+          supply = '24V DC LiFePO₄ (0,8 kWh)';
+          weight = 'Estimasi Bobot: ~14 kg';
+          ampDetail = 'Mono Class-D 300W–600W';
+        } else if (area <= 25) {
+          platform = 'Troli Taktis / Robot Pemadam Indoor';
+          const num15 = Math.max(2, Math.min(6, Math.ceil(powerW / 900)));
+          subConfig = num15 + '× Subwoofer 15"';
+          subDetail = 'Phase-Coupled Array (Xmax ≥ 22 mm)';
+          optFreq = '28 Hz – 35 Hz';
+          supply = '48V DC Pack (' + (powerW / 1000 * 0.9).toFixed(1) + ' kWh)';
+          weight = 'Estimasi Bobot: ~65–95 kg';
+          ampDetail = 'Multi-Channel Bridged Class-D';
+        } else if (area <= 90) {
+          platform = 'Meriam Sonik Mobil Pemadam (Truck Turret)';
+          const num18 = Math.max(6, Math.min(12, Math.ceil(powerW / 2200)));
+          subConfig = num18 + '× Subwoofer 18"–21"';
+          subDetail = 'Industrial Acoustic Piston / Rotary Sub';
+          optFreq = '22 Hz – 32 Hz';
+          supply = 'Generator Truk 380V AC / Baterai 25 kWh';
+          weight = 'Terpasang di Kendaraan (~450 kg)';
+          ampDetail = 'Industrial High-Voltage Rack Amp';
+        } else {
+          platform = 'Swarm Drone Berat + Turret Hibrida Gedung';
+          const numUnits = Math.max(4, Math.min(16, Math.ceil(area / 18)));
+          subConfig = numUnits + ' Unit × Dual-18" Array';
+          subDetail = 'Sinkronisasi Fase Nirkabel (Swarm Array)';
+          optFreq = '20 Hz – 30 Hz (Infrasonik-Bass)';
+          supply = 'Hibrida Generator + Tethered Power Drone';
+          weight = numUnits + ' Unit Terdistribusi (@ 45 kg)';
+          ampDetail = 'Distributed Swarm Class-D Array';
+        }
+
+        // Update UI Labels
+        labelScaleArea.textContent = area + ' m² (~' + (hrrKw >= 1000 ? hrrMw + ' MW' : hrrKw + ' kW') + ')';
+        labelScaleDist.textContent = dist + ' meter';
+
+        let typeLabel = 'Struktur Rumah/Ruangan';
+        if (bType === 'surface') typeLabel = 'Api Cairan / Permukaan';
+        if (bType === 'electrical') typeLabel = 'Ruang Server / Gardu Listrik';
+        if (bType === 'highrise') typeLabel = 'Gedung Bertingkat / Gudang';
+
+        scaleSceneTitle.textContent = 'Simulasi Taktis: ' + typeLabel + ' (' + area + ' m² | ' + (hrrKw >= 1000 ? hrrMw + ' MW' : hrrKw + ' kW') + ')';
+        scaleSceneSubtitle.textContent = 'Kecepatan Arus Api (Plume): ' + plumeVel + ' m/s | Target Kecepatan Vortex: > ' + reqVortexVel + ' m/s';
+
+        specPlatformBadge.textContent = platform;
+        specAmpPower.textContent = powerW >= 1000
+          ? (powerW / 1000).toFixed(1) + ' kW (' + powerW.toLocaleString('id-ID') + ' W)'
+          : powerW + ' Watt';
+        specAmpDetail.textContent = ampDetail;
+        specSubArray.textContent = subConfig;
+        specSubDetail.textContent = subDetail;
+        specOptFreq.textContent = optFreq;
+        specCollimatorDim.textContent = 'Ø ' + collDiaCm + ' cm × P ' + collLenCm + ' cm';
+        specOrificeDim.textContent = 'Lubang Moncong (Orifice): Ø ' + orificeCm + ' cm';
+        specSplLevel.textContent = splDb + ' dB SPL';
+        specSafetyNote.textContent = splDb >= 135
+          ? '⚠ Wajib Operasi Jarak Jauh / Drone (>135 dB)'
+          : '⚠ Wajib Pelindung Telinga Standar Industri';
+        specPowerSupply.textContent = supply;
+        specWeightEst.textContent = weight;
+      }
+
+      [sliderScaleArea, sliderScaleDist, selectScaleType].forEach(function(el) {
+        el.addEventListener('input', function() {
+          scaleState.area = parseFloat(sliderScaleArea.value);
+          scaleState.distance = parseFloat(sliderScaleDist.value);
+          scaleState.buildingType = selectScaleType.value;
+          if (scaleState.fireIntensity <= 0) {
+            scaleState.fireIntensity = 100;
+            scaleState.emberHeat = 100;
+          }
+          calculateFullScaleSpecs();
+        });
+      });
+
+      document.querySelectorAll('.scale-preset-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.scale-preset-btn').forEach(function(b) {
+            b.className = 'scale-preset-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-900/90 hover:border-orange-500/50 transition-all space-y-1';
+          });
+          btn.className = 'scale-preset-btn text-left p-3.5 rounded-xl border border-orange-500 bg-orange-500/10 transition-all space-y-1';
+
+          sliderScaleArea.value = btn.getAttribute('data-area');
+          sliderScaleDist.value = btn.getAttribute('data-dist');
+          selectScaleType.value = btn.getAttribute('data-type');
+
+          scaleState.area = parseFloat(sliderScaleArea.value);
+          scaleState.distance = parseFloat(sliderScaleDist.value);
+          scaleState.buildingType = selectScaleType.value;
+          scaleState.fireIntensity = 100;
+          scaleState.emberHeat = 100;
+          calculateFullScaleSpecs();
+        });
+      });
+
+      const btnScaleIgniteInline = document.getElementById('btn-scale-ignite-inline');
+      const btnScaleCannonInline = document.getElementById('btn-scale-cannon-inline');
+
+      function setScaleCannonState(active) {
+        scaleState.isCannonActive = active;
+        if (scaleState.isCannonActive) {
+          scaleWaveIcon.textContent = '⏹️';
+          scaleWaveText.textContent = 'Hentikan Meriam Vortex';
+          btnScaleFireToggle.className = 'flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2';
+          if (btnScaleCannonInline) {
+            btnScaleCannonInline.textContent = '⏹️ Hentikan Vortex';
+            btnScaleCannonInline.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-500 text-white shadow transition-all';
+          }
+        } else {
+          scaleWaveIcon.textContent = '🔊';
+          scaleWaveText.textContent = 'Aktifkan Meriam Vortex';
+          btnScaleFireToggle.className = 'flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2';
+          if (btnScaleCannonInline) {
+            btnScaleCannonInline.textContent = '🔊 Tembakkan Vortex';
+            btnScaleCannonInline.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-orange-600 hover:bg-orange-500 text-white shadow transition-all';
+          }
+        }
+      }
+
+      function igniteScaleFire() {
+        scaleState.fireIntensity = 100;
+        scaleState.emberHeat = 100;
+        setScaleCannonState(false);
+      }
+
+      btnScaleFireToggle.addEventListener('click', function() {
+        setScaleCannonState(!scaleState.isCannonActive);
+      });
+
+      if (btnScaleCannonInline) {
+        btnScaleCannonInline.addEventListener('click', function() {
+          setScaleCannonState(!scaleState.isCannonActive);
+        });
+      }
+
+      if (btnScaleIgniteInline) {
+        btnScaleIgniteInline.addEventListener('click', igniteScaleFire);
+      }
+
+      scaleCanvas.addEventListener('click', function() {
+        if (scaleState.fireIntensity <= 0) {
+          igniteScaleFire();
+        }
+      });
+
+      btnScaleHybrid.addEventListener('click', function() {
+        scaleState.isHybridMist = !scaleState.isHybridMist;
+        if (scaleState.isHybridMist) {
+          btnScaleHybrid.textContent = '❄️ Pendingin Kabut Hibrida: ON';
+          btnScaleHybrid.className = 'px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition-all';
+        } else {
+          btnScaleHybrid.textContent = '❄️ Pendingin Kabut Hibrida: OFF';
+          btnScaleHybrid.className = 'px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 transition-all';
+        }
+      });
+
+      btnScaleReignite.addEventListener('click', igniteScaleFire);
+
+      let lastScaleRingTime = 0;
+
+      function updateScaleSimulation(timestamp) {
+        scaleState.phase += 0.18;
+
+        const cannonX = 135;
+        const cannonY = sch * 0.58;
+        const buildingX = Math.min(scw - 140, cannonX + 120 + (scaleState.distance / 30) * (scw * 0.42));
+        const groundY = sch - 34;
+
+        // Spawn large vortex rings when active
+        if (scaleState.isCannonActive && timestamp - lastScaleRingTime > 120) {
+          lastScaleRingTime = timestamp;
+          const ringRad = Math.min(52, 16 + Math.pow(scaleState.area, 0.35) * 6);
+          scaleState.vortexRings.push({
+            x: cannonX + 10,
+            y: cannonY,
+            radius: ringRad,
+            speed: 5.2,
+            alpha: 0.92
+          });
+
+          if (scaleState.isHybridMist) {
+            for (let m = 0; m < 3; m++) {
+              scaleState.mistParticles.push({
+                x: cannonX + 12,
+                y: cannonY + (Math.random() - 0.5) * ringRad,
+                vx: 4.5 + Math.random() * 1.5,
+                vy: (Math.random() - 0.5) * 0.8,
+                alpha: 0.65
+              });
+            }
+          }
+        }
+
+        // Move rings
+        let hittingBuilding = false;
+        for (let i = scaleState.vortexRings.length - 1; i >= 0; i--) {
+          const r = scaleState.vortexRings[i];
+          r.x += r.speed;
+          r.alpha -= 0.007;
+          if (Math.abs(r.x - buildingX) < 55) {
+            hittingBuilding = true;
+          }
+          if (r.x > scw + 30 || r.alpha <= 0.02) {
+            scaleState.vortexRings.splice(i, 1);
+          }
+        }
+
+        // Move mist particles
+        for (let i = scaleState.mistParticles.length - 1; i >= 0; i--) {
+          const mp = scaleState.mistParticles[i];
+          mp.x += mp.vx;
+          mp.y += mp.vy;
+          mp.alpha -= 0.012;
+          if (mp.alpha <= 0) scaleState.mistParticles.splice(i, 1);
+        }
+
+        // Fire & Ember Thermodynamics
+        const hasHotEmbers = (scaleState.buildingType === 'structural' || scaleState.buildingType === 'highrise');
+        if (scaleState.isCannonActive && hittingBuilding) {
+          // Acoustic waves rapidly knock down flames
+          scaleState.fireIntensity = Math.max(0, scaleState.fireIntensity - 1.15);
+          if (scaleState.isHybridMist || !hasHotEmbers) {
+            scaleState.emberHeat = Math.max(0, scaleState.emberHeat - 0.85);
+          } else {
+            // Without hybrid cooling, embers cool very slowly
+            scaleState.emberHeat = Math.max(45, scaleState.emberHeat - 0.08);
+          }
+        } else {
+          // If cannon is off, check if hot embers cause reignition!
+          if (scaleState.fireIntensity > 0) {
+            scaleState.fireIntensity = Math.min(100, scaleState.fireIntensity + 0.45);
+          } else if (hasHotEmbers && scaleState.emberHeat > 35) {
+            // Re-ignite from hot structural embers!
+            scaleState.fireIntensity = Math.min(100, scaleState.fireIntensity + 0.6);
+          }
+        }
+
+        // Status messages & badge
+        const fInt = Math.round(scaleState.fireIntensity);
+        const eInt = Math.round(scaleState.emberHeat);
+
+        if (fInt === 0 && eInt <= 35) {
+          scaleFireStatusBadge.textContent = 'PADAM & AMAN (0%)';
+          scaleFireStatusBadge.className = 'px-2.5 py-1 rounded-lg text-xs font-extrabold mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+          scaleLiveStatus.textContent = '✅ KEBAKARAN GEDUNG PADAM TOTAL! Cincin vortex telah memutus oksigen dan bara struktur telah didinginkan di bawah titik nyala.';
+          scaleLiveStatus.className = 'text-xs font-bold text-emerald-400 bg-slate-900/90 border border-emerald-500/30 rounded-xl px-3.5 py-2.5';
+        } else if (fInt === 0 && eInt > 35) {
+          scaleFireStatusBadge.textContent = 'BARA PANAS (' + eInt + '%)';
+          scaleFireStatusBadge.className = 'px-2.5 py-1 rounded-lg text-xs font-extrabold mono bg-amber-500/20 text-amber-300 border border-amber-500/30';
+          scaleLiveStatus.textContent = '⚠️ LIDAH API PADAM, TAPI BARA KAYU MASIH PANAS! Jika Meriam Vortex dimatikan tanpa Pendingin Hibrida, api akan menyala kembali (Re-ignisi).';
+          scaleLiveStatus.className = 'text-xs font-medium text-amber-300 bg-slate-900/90 border border-amber-500/30 rounded-xl px-3.5 py-2.5';
+        } else {
+          scaleFireStatusBadge.textContent = 'BERKOBAR (' + fInt + '%)';
+          scaleFireStatusBadge.className = 'px-2.5 py-1 rounded-lg text-xs font-extrabold mono bg-red-500/20 text-red-300 border border-red-500/30';
+          scaleLiveStatus.textContent = scaleState.isCannonActive
+            ? '🔊 Meriam Vortex menembakkan cincin tekanan frekuensi rendah untuk meruntuhkan kolom api (fire plume)...'
+            : '🔥 Api berkobar hebat! Klik "Aktifkan Meriam Vortex" untuk memulai pemadaman skala penuh.';
+          scaleLiveStatus.className = 'text-xs font-medium text-cyan-300 bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2.5';
+        }
+
+        // Draw Scale Canvas
+        scaleCtx.clearRect(0, 0, scw, sch);
+
+        // Ground line
+        scaleCtx.strokeStyle = '#334155';
+        scaleCtx.lineWidth = 2;
+        scaleCtx.beginPath();
+        scaleCtx.moveTo(0, groundY);
+        scaleCtx.lineTo(scw, groundY);
+        scaleCtx.stroke();
+
+        // Draw House / Building Structure on the right
+        const bWidth = Math.min(150, 65 + Math.pow(scaleState.area, 0.45) * 10);
+        const bHeight = Math.min(sch - 55, 85 + Math.pow(scaleState.area, 0.42) * 14);
+        const bLeft = buildingX - bWidth / 2;
+        const bTop = groundY - bHeight;
+
+        scaleCtx.fillStyle = '#1e293b';
+        scaleCtx.strokeStyle = '#475569';
+        scaleCtx.lineWidth = 2;
+        scaleCtx.fillRect(bLeft, bTop, bWidth, bHeight);
+        scaleCtx.strokeRect(bLeft, bTop, bWidth, bHeight);
+
+        // Windows grid on building
+        const rows = Math.max(2, Math.floor(bHeight / 36));
+        const cols = Math.max(2, Math.floor(bWidth / 32));
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const wx = bLeft + 10 + c * ((bWidth - 16) / cols);
+            const wy = bTop + 12 + r * ((bHeight - 20) / rows);
+            if (scaleState.fireIntensity > 0) {
+              scaleCtx.fillStyle = 'rgba(249, 115, 22, ' + (0.35 + 0.5 * (scaleState.fireIntensity / 100)) + ')';
+            } else if (scaleState.emberHeat > 35) {
+              scaleCtx.fillStyle = 'rgba(220, 38, 38, 0.35)';
+            } else {
+              scaleCtx.fillStyle = '#0f172a';
+            }
+            scaleCtx.fillRect(wx, wy, 14, 18);
+          }
+        }
+
+        // Draw flames on building if burning
+        if (scaleState.fireIntensity > 0) {
+          const numFlames = Math.ceil((scaleState.fireIntensity / 100) * 10);
+          for (let f = 0; f < numFlames; f++) {
+            const fx = bLeft + Math.random() * bWidth;
+            const fy = bTop + Math.random() * (bHeight * 0.75);
+            const fr = 12 + Math.random() * 24 * (scaleState.fireIntensity / 100);
+            const grad = scaleCtx.createRadialGradient(fx, fy, 2, fx, fy, fr);
+            grad.addColorStop(0, 'rgba(255, 255, 200, 0.9)');
+            grad.addColorStop(0.5, 'rgba(249, 115, 22, 0.75)');
+            grad.addColorStop(1, 'rgba(220, 38, 38, 0)');
+            scaleCtx.fillStyle = grad;
+            scaleCtx.beginPath();
+            scaleCtx.arc(fx + (hittingBuilding ? 14 : 0), fy - 8, fr, 0, Math.PI * 2);
+            scaleCtx.fill();
+          }
+        }
+
+        // Draw Sonic Cannon / Truck / Drone Array on the left
+        scaleCtx.fillStyle = '#0f172a';
+        scaleCtx.strokeStyle = '#f97316';
+        scaleCtx.lineWidth = 2;
+        const cHeight = Math.min(76, 28 + Math.pow(scaleState.area, 0.32) * 7);
+        scaleCtx.beginPath();
+        scaleCtx.roundRect(cannonX - 95, cannonY - cHeight / 2, 100, cHeight, 8);
+        scaleCtx.fill();
+        scaleCtx.stroke();
+
+        // Wheels / Base or Drone Rotors
+        scaleCtx.fillStyle = '#94a3b8';
+        scaleCtx.font = 'bold 10px Inter, sans-serif';
+        scaleCtx.textAlign = 'center';
+        scaleCtx.fillText(scaleState.area > 90 ? 'SWARM DRONE ARRAY' : 'SONIC VORTEX CANNON', cannonX - 45, cannonY + 4);
+
+        // Draw Vortex Rings
+        scaleState.vortexRings.forEach(function(r) {
+          scaleCtx.strokeStyle = 'rgba(34, 211, 238, ' + r.alpha + ')';
+          scaleCtx.lineWidth = 3;
+          scaleCtx.beginPath();
+          scaleCtx.ellipse(r.x, r.y, 9, r.radius, 0, 0, Math.PI * 2);
+          scaleCtx.stroke();
+        });
+
+        // Draw Hybrid Mist Particles
+        scaleState.mistParticles.forEach(function(mp) {
+          scaleCtx.fillStyle = 'rgba(125, 211, 252, ' + mp.alpha + ')';
+          scaleCtx.beginPath();
+          scaleCtx.arc(mp.x, mp.y, 2.5, 0, Math.PI * 2);
+          scaleCtx.fill();
+        });
+
+        requestAnimationFrame(updateScaleSimulation);
+      }
+
+      // Initialize everything on load
+      window.addEventListener('load', function() {
+        resizeCanvas();
+        initParticles();
+        updateControlLabels();
+        updateTheoryCalc();
+        updateDiyCalc();
+        resizeScaleCanvas();
+        calculateFullScaleSpecs();
+        toggleWave(true); // Start with wave active at 30 Hz so user immediately sees it in action!
+        requestAnimationFrame(updateSimulation);
+        requestAnimationFrame(updateScaleSimulation);
+      });
+    })();
+  </script>
+</body>
+</html>
